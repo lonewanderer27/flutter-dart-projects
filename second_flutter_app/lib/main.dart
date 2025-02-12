@@ -38,9 +38,11 @@ class MyApp extends StatelessWidget {
                   )
                 ],
               ),
-              Text(
+              GradientText(
                 'Fast forward to the future',
-                style: TextStyle(fontSize: 25, color: Colors.white),
+                gradient: LinearGradient(
+                    colors: <Color>[Color(0xFF00bbf8), Color(0xFF007ad6)]),
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               )
             ],
           )),
