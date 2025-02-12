@@ -8,10 +8,11 @@ void main() {
   runApp(MyApp());
 }
 
+final String title = 'stratpoint';
+final String description = 'Fast forward to the future';
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  final String description = 'Fast forward to the future';
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +28,12 @@ class MyApp extends StatelessWidget {
               children: <Widget>[
                 Wrap(
                   children: [
-                    GradientText('strat',
+                    GradientText(title.substring(0, 5),
                         gradient: AppGradients.stratpointGradient,
                         style: TextStyle(
                             fontSize: 50, fontWeight: FontWeight.bold)),
                     Text(
-                      'point',
+                      title.substring(5, title.length),
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 50,
