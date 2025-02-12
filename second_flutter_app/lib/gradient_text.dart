@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// practice moving a different widget to another file
 class GradientText extends StatelessWidget {
   const GradientText(
     this.text, {
