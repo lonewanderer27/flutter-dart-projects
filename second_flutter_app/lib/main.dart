@@ -4,7 +4,14 @@ void main() {
   // using const allows the widgets by the app
   // to be cached, improving performance.
   runApp(const MaterialApp(
-    home: Text('Hello Dart!'),
+    home: Scaffold(
+      backgroundColor: Color(0xFF00a7ee),
+      body: Center(
+          child: Text(
+        'Stratpoint',
+        style: TextStyle(color: Color(0xFF0b0809)),
+      )),
+    ),
   ));
 }
 
