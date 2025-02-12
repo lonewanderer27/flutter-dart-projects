@@ -3,16 +3,74 @@ import 'package:flutter/material.dart';
 void main() {
   // using const allows the widgets by the app
   // to be cached, improving performance.
-  runApp(const MaterialApp(
-    home: Scaffold(
-      backgroundColor: Color(0xFF00a7ee),
-      body: Center(
-          child: Text(
-        'Stratpoint',
-        style: TextStyle(color: Color(0xFF0b0809)),
-      )),
-    ),
-  ));
+  runApp(MyApp());
+}
+
+class GradientText extends StatelessWidget {
+  const GradientText(
+    this.text, {
+    super.key,
+    required this.gradient,
+    this.style,
+  });
+
+  final String text;
+  final TextStyle? style;
+  final Gradient gradient;
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      blendMode: BlendMode.srcIn,
+      shaderCallback: (Rect bounds) => gradient.createShader(
+        Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+      ),
+      child: Text(text, style: style),
+    );
+  }
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(color: Colors.black),
+          child: Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Wrap(
+                children: [
+                  GradientText('strat',
+                      gradient: LinearGradient(colors: <Color>[
+                        Color(0xFF00bbf8),
+                        Color(0xFF007ad6)
+                      ]),
+                      style:
+                          TextStyle(fontSize: 50, fontWeight: FontWeight.bold)),
+                  Text(
+                    'point',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+              Text(
+                'Fast forward to the future',
+                style: TextStyle(fontSize: 25, color: Colors.white),
+              )
+            ],
+          )),
+        ),
+      ),
+    );
+  }
 }
 
 // import 'package:flutter/material.dart';
