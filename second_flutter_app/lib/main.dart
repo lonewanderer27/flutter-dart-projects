@@ -81,10 +81,16 @@ class _MyAppState extends State<MyApp> {
                   padding: const EdgeInsets.only(top: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      ElevatedButton(onPressed: _prev, child: Text('Prev')),
+                    children: [
+                      currentCompany != 0
+                          ? ElevatedButton(
+                              onPressed: _prev, child: Text('Prev'))
+                          : SizedBox(width: 80),
                       ElevatedButton(onPressed: _random, child: Text('Random')),
-                      ElevatedButton(onPressed: _next, child: Text('Next'))
+                      currentCompany != Companies().companies.length - 1
+                          ? ElevatedButton(
+                              onPressed: _next, child: Text('Next'))
+                          : SizedBox(width: 80)
                     ],
                   ),
                 )
