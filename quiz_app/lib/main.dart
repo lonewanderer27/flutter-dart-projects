@@ -18,7 +18,11 @@ class _QuizAppState extends State<QuizApp> {
     return MaterialApp(
       home: Scaffold(
         body: Container(
-          decoration: BoxDecoration(color: Color(0xFF480090)),
+          decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                  colors: [Color(0xFF310165), Color(0xFF29143d)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter)),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Center(
