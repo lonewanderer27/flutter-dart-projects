@@ -14,7 +14,11 @@ class StartScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(Assets.quizLogo, width: 250),
+            Image.asset(
+              Assets.quizLogo,
+              width: 250,
+              color: const Color.fromARGB(175, 255, 255, 255),
+            ),
             Padding(
               padding: EdgeInsets.only(top: 50, bottom: 30),
               child: Text('Learn Flutter the fun way!',
