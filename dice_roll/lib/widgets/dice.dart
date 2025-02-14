@@ -26,6 +26,6 @@ class Dice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(faceAsset, width: 200, height: 200);
+    return Image.asset(faceAsset, width: 175, height: 175);
   }
 }

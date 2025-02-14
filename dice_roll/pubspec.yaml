@@ -35,7 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   lottie: ^3.3.1
-  assets_audio_player: ^3.1.1
+  just_audio: ^0.9.46
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +67,7 @@ flutter:
     - "assets/images/dice-5.png"
     - "assets/images/dice-6.png"
     - "assets/animation/dice_roll.json"
+    - "assets/sounds/dice_roll.mp3"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

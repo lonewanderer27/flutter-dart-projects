@@ -9,22 +9,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-  assets_audio_player:
-    dependency: "direct main"
-    description:
-      name: assets_audio_player
-      sha256: "9a87062cf39be0730ba8bb31ed4d148ca4e892e0ae607113f346d3c9a8da5df0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.1"
-  assets_audio_player_web:
-    dependency: transitive
-    description:
-      name: assets_audio_player_web
-      sha256: "24cf82e72c7e7f9292d67e1b52d7945a182d9695ce8f903f60e5c6b379cbcaac"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.1"
   async:
     dependency: transitive
     description:
@@ -33,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  audio_session:
+    dependency: transitive
+    description:
+      name: audio_session
+      sha256: "2b7fff16a552486d078bfc09a8cde19f426dc6d6329262b684182597bec5b1ac"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.25"
   boolean_selector:
     dependency: transitive
     description:
@@ -136,6 +128,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
+  just_audio:
+    dependency: "direct main"
+    description:
+      name: just_audio
+      sha256: f978d5b4ccea08f267dae0232ec5405c1b05d3f3cd63f82097ea46c015d5c09e
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.46"
+  just_audio_platform_interface:
+    dependency: transitive
+    description:
+      name: just_audio_platform_interface
+      sha256: "271b93b484c6f494ecd72a107fffbdb26b425f170c665b9777a0a24a726f2f24"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.4.0"
+  just_audio_web:
+    dependency: transitive
+    description:
+      name: just_audio_web
+      sha256: "58915be64509a7683c44bf11cd1a23c15a48de104927bee116e3c63c8eeea0d4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.14"
   leak_tracker:
     dependency: transitive
     description:

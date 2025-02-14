@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:dice_roll/widgets/dice.dart';
 import 'package:dice_roll/widgets/dice_rolling.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 
 void main() {
   runApp(DiceApp());
@@ -17,8 +17,27 @@ class DiceApp extends StatefulWidget {
 }
 
 class _DiceAppState extends State<DiceApp> {
+  late AudioPlayer _player;
   int _currentDice = 0;
   bool _rolling = false;
+
+  Future<void> _setAsset() async {
+    // TODO: Fix this 
+    // await _player.setAsset('assets/sounds/dice_roll.mp3');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _player = AudioPlayer();
+    _setAsset();
+  }
+
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
+  }
 
   void _roll() {
     setState(() {
@@ -26,8 +45,7 @@ class _DiceAppState extends State<DiceApp> {
       _rolling = true;
 
       // play sound
-      AssetsAudioPlayer.newPlayer()
-          .open(Audio("assets/sounds/dice_roll.mp3"), autoStart: true);
+      _player.play();
 
       // initialize in advance what would be the next face
       _currentDice = Random().nextInt(5);
@@ -56,13 +74,16 @@ class _DiceAppState extends State<DiceApp> {
                   _rolling == true
                       ? DiceRolling()
                       : Padding(
-                          padding: const EdgeInsets.all(50),
+                          padding: const EdgeInsets.only(
+                            top: 60,
+                            bottom: 60
+                          ),
                           child: Dice(no: _currentDice)),
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: ElevatedButton(
-                      onPressed: _roll,
-                      child: Text('Roll'),
+                      onPressed: _rolling == false ? _roll : null,
+                      child: Text(_rolling == false ? 'Roll' : 'Rolling')
                     ),
                   )
                 ],
