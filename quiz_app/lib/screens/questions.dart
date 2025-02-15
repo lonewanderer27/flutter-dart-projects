@@ -70,53 +70,68 @@ class _QuestionsState extends State<Questions> {
       padding: EdgeInsets.all(20),
       child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              currentQuestion.questionText,
-              style: TextStyle(color: Colors.white, fontSize: 25),
-              textAlign: TextAlign.center,
+            Column(
+              children: [
+                Text('Question ${currentNo + 1} out of ${questions.length}',
+                    style: TextStyle(color: Colors.white))
+              ],
             ),
-            SizedBox(height: 30),
-            Choices(question: currentQuestion, setAnswer: _setAnswer),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  currentQuestion.questionText,
+                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 30),
+                Choices(question: currentQuestion, setAnswer: _setAnswer),
+                SizedBox(height: 30),
+              ],
+            ),
+            Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                        onPressed: currentNo == 0 ? null : _firstQuestion,
-                        icon: Icon(Icons.first_page),
-                        style: IconButton.styleFrom(
-                            foregroundColor: Colors.white)),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: ElevatedButton.icon(
-                        onPressed: currentNo == 0 ? null : _prevQuestion,
-                        label: Text('Prev'),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    ElevatedButton.icon(
-                        onPressed: currentNo == questions.length - 1
-                            ? null
-                            : _nextQuestion,
-                        label: Text('Next')),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: IconButton(
-                        onPressed: currentNo == questions.length - 1
-                            ? null
-                            : _lastQuestion,
-                        icon: Icon(Icons.last_page),
-                        style:
-                            IconButton.styleFrom(foregroundColor: Colors.white),
-                      ),
+                    Row(
+                      children: [
+                        IconButton(
+                            onPressed: currentNo == 0 ? null : _firstQuestion,
+                            icon: Icon(Icons.first_page),
+                            style: IconButton.styleFrom(
+                                foregroundColor: Colors.white)),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: ElevatedButton.icon(
+                            onPressed: currentNo == 0 ? null : _prevQuestion,
+                            label: Text('Prev'),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        ElevatedButton.icon(
+                            onPressed: currentNo == questions.length - 1
+                                ? null
+                                : _nextQuestion,
+                            label: Text('Next')),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: IconButton(
+                            onPressed: currentNo == questions.length - 1
+                                ? null
+                                : _lastQuestion,
+                            icon: Icon(Icons.last_page),
+                            style: IconButton.styleFrom(
+                                foregroundColor: Colors.white),
+                          ),
+                        )
+                      ],
                     )
                   ],
                 )
