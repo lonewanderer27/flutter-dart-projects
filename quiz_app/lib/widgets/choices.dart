@@ -61,10 +61,14 @@ class Choices extends StatelessWidget {
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
-              TextField(style: TextStyle(color: Colors.white)),
-              TextField(style: TextStyle(color: Colors.white)),
-              TextField(style: TextStyle(color: Colors.white)),
-              TextField(style: TextStyle(color: Colors.white)),
+              ...(List<String>.from(
+                      (question as OrderingQuestion).correctAnswer)
+                    ..shuffle())
+                  .map((opt) {
+                    return TextField(
+                      style: TextStyle(color: Colors.white),
+                    );
+                  }),
             ]
           ],
         ),
