@@ -90,11 +90,11 @@ var orderingQuestions = [
   OrderingQuestion(
     questionText:
         "Arrange the data types in Dart from smallest to largest memory size.",
-    correctOrder: ["bool", "int", "double", "String"],
+    correctAnswer: ["bool", "int", "double", "String"],
   ),
   OrderingQuestion(
     questionText: "Arrange the steps for using Futures in Dart.",
-    correctOrder: [
+    correctAnswer: [
       "Define Future",
       "Use then() or await",
       "Handle errors",
@@ -103,16 +103,16 @@ var orderingQuestions = [
   ),
   OrderingQuestion(
     questionText: "Arrange the lifecycle of a Dart program execution.",
-    correctOrder: ["Compile", "Run", "Garbage Collection", "Exit"],
+    correctAnswer: ["Compile", "Run", "Garbage Collection", "Exit"],
   ),
   OrderingQuestion(
     questionText:
         "Arrange the keywords in Dart from least to most restrictive.",
-    correctOrder: ["public", "protected", "private"],
+    correctAnswer: ["public", "protected", "private"],
   ),
   OrderingQuestion(
     questionText: "Arrange the steps to define a class in Dart.",
-    correctOrder: [
+    correctAnswer: [
       "Define class",
       "Add constructor",
       "Define methods",

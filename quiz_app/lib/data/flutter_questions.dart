@@ -88,7 +88,7 @@ var fillInTheBlanksQuestions = [
 var orderingQuestions = [
   OrderingQuestion(
     questionText: "Arrange the steps to create a Flutter project.",
-    correctOrder: [
+    correctAnswer: [
       "Install Flutter SDK",
       "Create a new Flutter project",
       "Write UI code",
@@ -97,16 +97,16 @@ var orderingQuestions = [
   ),
   OrderingQuestion(
     questionText: "Arrange the Flutter widget tree structure from top to bottom.",
-    correctOrder: ["MaterialApp", "Scaffold", "Column", "Text"],
+    correctAnswer: ["MaterialApp", "Scaffold", "Column", "Text"],
   ),
   OrderingQuestion(
     questionText:
         "Arrange the steps to implement state management in a StatefulWidget.",
-    correctOrder: ["Create StatefulWidget", "Define State", "Call setState()"],
+    correctAnswer: ["Create StatefulWidget", "Define State", "Call setState()"],
   ),
   OrderingQuestion(
     questionText: "Arrange the steps to navigate between screens in Flutter.",
-    correctOrder: [
+    correctAnswer: [
       "Create two screens",
       "Use Navigator.push()",
       "Use Navigator.pop() to go back"
@@ -114,7 +114,7 @@ var orderingQuestions = [
   ),
   OrderingQuestion(
     questionText: "Arrange the Flutter widget lifecycle methods in order.",
-    correctOrder: [
+    correctAnswer: [
       "createState()",
       "initState()",
       "build()",
