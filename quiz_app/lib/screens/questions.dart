@@ -27,12 +27,32 @@ class _QuestionsState extends State<Questions> {
     print('Q: ${currentQuestion.questionText}\nUser: $answer');
   }
 
+  void _updateQuestion() {
+    setState(() {
+      currentQuestion = questions.elementAt(currentNo);
+      print('Current question: $currentQuestion');
+    });
+  }
+
+  void _firstQuestion() {
+    setState(() {
+      currentNo = 0;
+      _updateQuestion();
+    });
+  }
+
+  void _lastQuestion() {
+    setState(() {
+      currentNo = questions.length - 1;
+      _updateQuestion();
+    });
+  }
+
   void _nextQuestion() {
     if (currentNo == questions.length - 1) return;
     setState(() {
       currentNo++;
-      currentQuestion = questions.elementAt(currentNo);
-      print('Current question: $currentQuestion');
+      _updateQuestion();
     });
   }
 
@@ -40,8 +60,7 @@ class _QuestionsState extends State<Questions> {
     if (currentNo == 0) return;
     setState(() {
       currentNo--;
-      currentQuestion = questions.elementAt(currentNo);
-      print('Current question: $currentQuestion');
+      _updateQuestion();
     });
   }
 
@@ -65,16 +84,41 @@ class _QuestionsState extends State<Questions> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton.icon(
-                  onPressed: currentNo == 0 ? null : _prevQuestion,
-                  label: Text('Prev'),
-                  style: ElevatedButton.styleFrom(maximumSize: Size.infinite),
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: currentNo == 0 ? null : _firstQuestion,
+                        icon: Icon(Icons.first_page),
+                        style: IconButton.styleFrom(
+                            foregroundColor: Colors.white)),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: ElevatedButton.icon(
+                        onPressed: currentNo == 0 ? null : _prevQuestion,
+                        label: Text('Prev'),
+                      ),
+                    )
+                  ],
                 ),
-                ElevatedButton.icon(
-                  onPressed:
-                      currentNo == questions.length - 1 ? null : _nextQuestion,
-                  label: Text('Next'),
-                  style: ElevatedButton.styleFrom(maximumSize: Size.infinite),
+                Row(
+                  children: [
+                    ElevatedButton.icon(
+                        onPressed: currentNo == questions.length - 1
+                            ? null
+                            : _nextQuestion,
+                        label: Text('Next')),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: IconButton(
+                        onPressed: currentNo == questions.length - 1
+                            ? null
+                            : _lastQuestion,
+                        icon: Icon(Icons.last_page),
+                        style:
+                            IconButton.styleFrom(foregroundColor: Colors.white),
+                      ),
+                    )
+                  ],
                 )
               ],
             )
