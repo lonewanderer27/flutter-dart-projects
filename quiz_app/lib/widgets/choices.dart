@@ -26,24 +26,32 @@ class Choices extends StatelessWidget {
           children: [
             if (question is MultipleChoiceQuestion) ...[
               ...(question as MultipleChoiceQuestion).options.map((opt) {
-                return AnswerButton(
-                    label: opt,
-                    onPressed: () {
-                      setAnswer(opt);
-                    });
+                return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    child: AnswerButton(
+                        label: opt,
+                        onPressed: () {
+                          setAnswer(opt);
+                        }));
               })
             ],
             if (question is TrueFalseQuestion) ...[
-              AnswerButton(
-                  label: 'True',
-                  onPressed: () {
-                    setAnswer('true');
-                  }),
-              AnswerButton(
-                  label: 'False',
-                  onPressed: () {
-                    setAnswer('false');
-                  })
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: AnswerButton(
+                    label: 'True',
+                    onPressed: () {
+                      setAnswer('true');
+                    }),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: AnswerButton(
+                    label: 'False',
+                    onPressed: () {
+                      setAnswer('false');
+                    }),
+              )
             ],
             if (question is FillInTheBlankQuestion) ...[
               TextField(
@@ -65,10 +73,10 @@ class Choices extends StatelessWidget {
                       (question as OrderingQuestion).correctAnswer)
                     ..shuffle())
                   .map((opt) {
-                    return TextField(
-                      style: TextStyle(color: Colors.white),
-                    );
-                  }),
+                return TextField(
+                  style: TextStyle(color: Colors.white),
+                );
+              }),
             ]
           ],
         ),
