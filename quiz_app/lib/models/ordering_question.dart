@@ -4,6 +4,13 @@ import 'package:quiz_app/models/question.dart';
 class OrderingQuestion extends Question {
   final List<String> correctAnswer;
 
+  List<String> get shuffledAnswers {
+    var shuffledAnswers = correctAnswer;
+    // shuffle our answers
+    shuffledAnswers.shuffle();
+    return shuffledAnswers;
+  }
+
   OrderingQuestion({required String questionText, required this.correctAnswer})
       : super(questionText);
 

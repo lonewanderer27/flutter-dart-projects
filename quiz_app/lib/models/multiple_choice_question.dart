@@ -1,12 +1,19 @@
 import 'package:quiz_app/models/question.dart';
 
 class MultipleChoiceQuestion extends Question {
-  final List<String> options;
+  final List<String> answers;
   final String correctAnswer;
+
+  List<String> get getShuffledAnswers {
+    var shuffledAnswers = answers;
+    // shuffle our answers
+    shuffledAnswers.shuffle();
+    return shuffledAnswers;
+  }
 
   MultipleChoiceQuestion({
     required String questionText,
-    required this.options,
+    required this.answers,
     required this.correctAnswer,
   }) : super(questionText);
 

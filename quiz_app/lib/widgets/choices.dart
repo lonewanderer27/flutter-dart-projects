@@ -25,7 +25,9 @@ class Choices extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (question is MultipleChoiceQuestion) ...[
-              ...(question as MultipleChoiceQuestion).options.map((opt) {
+              ...(question as MultipleChoiceQuestion)
+                  .getShuffledAnswers
+                  .map((opt) {
                 return Padding(
                     padding: EdgeInsets.symmetric(vertical: 5),
                     child: AnswerButton(
@@ -62,17 +64,11 @@ class Choices extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(bottom: 30),
                 child: Text(
-                  (List<String>.from(
-                          (question as OrderingQuestion).correctAnswer)
-                        ..shuffle())
-                      .join(', '),
+                  (question as OrderingQuestion).shuffledAnswers.join(', '),
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
-              ...(List<String>.from(
-                      (question as OrderingQuestion).correctAnswer)
-                    ..shuffle())
-                  .map((opt) {
+              ...(question as OrderingQuestion).shuffledAnswers.map((opt) {
                 return TextField(
                   style: TextStyle(color: Colors.white),
                 );

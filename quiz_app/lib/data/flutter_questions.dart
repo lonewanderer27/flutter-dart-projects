@@ -6,22 +6,22 @@ import 'package:quiz_app/models/true_false_question.dart';
 var multipleChoiceQuestions = [
   MultipleChoiceQuestion(
     questionText: "Which function is used to start a Flutter application?",
-    options: ["run()", "main()", "runApp()", "start()"],
+    answers: ["run()", "main()", "runApp()", "start()"],
     correctAnswer: "runApp()",
   ),
   MultipleChoiceQuestion(
     questionText: "Which widget is the root of a Flutter app?",
-    options: ["StatelessWidget", "StatefulWidget", "MaterialApp", "Container"],
+    answers: ["StatelessWidget", "StatefulWidget", "MaterialApp", "Container"],
     correctAnswer: "MaterialApp",
   ),
   MultipleChoiceQuestion(
     questionText: "Which widget helps in managing the state in Flutter?",
-    options: ["Container", "StatefulWidget", "StatelessWidget", "Text"],
+    answers: ["Container", "StatefulWidget", "StatelessWidget", "Text"],
     correctAnswer: "StatefulWidget",
   ),
   MultipleChoiceQuestion(
     questionText: "Which command is used to create a new Flutter project?",
-    options: [
+    answers: [
       "flutter create <project_name>",
       "flutter new <project_name>",
       "flutter start <project_name>",
@@ -31,7 +31,7 @@ var multipleChoiceQuestions = [
   ),
   MultipleChoiceQuestion(
     questionText: "Which widget is used to create a scrollable list in Flutter?",
-    options: ["ListView", "Column", "Row", "Stack"],
+    answers: ["ListView", "Column", "Row", "Stack"],
     correctAnswer: "ListView",
   )
 ];

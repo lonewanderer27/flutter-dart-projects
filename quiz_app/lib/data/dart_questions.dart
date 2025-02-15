@@ -7,23 +7,23 @@ var multipleChoiceQuestions = [
   MultipleChoiceQuestion(
     questionText:
         "Which keyword is used to define a constant variable in Dart?",
-    options: ["const", "final", "static", "immutable"],
+    answers: ["const", "final", "static", "immutable"],
     correctAnswer: "const",
   ),
   MultipleChoiceQuestion(
     questionText: "What is the entry point of a Dart program?",
-    options: ["main()", "runApp()", "void()", "start()"],
+    answers: ["main()", "runApp()", "void()", "start()"],
     correctAnswer: "main()",
   ),
   MultipleChoiceQuestion(
     questionText: "Which data type represents null safety in Dart?",
-    options: ["null", "void", "?", "None of the above"],
+    answers: ["null", "void", "?", "None of the above"],
     correctAnswer: "?",
   ),
   MultipleChoiceQuestion(
     questionText:
         "Which function is used to asynchronously delay execution in Dart?",
-    options: [
+    answers: [
       "Future.delayed()",
       "await sleep()",
       "setTimeout()",
@@ -33,7 +33,7 @@ var multipleChoiceQuestions = [
   ),
   MultipleChoiceQuestion(
     questionText: "Which collection type maintains key-value pairs in Dart?",
-    options: ["List", "Set", "Map", "Array"],
+    answers: ["List", "Set", "Map", "Array"],
     correctAnswer: "Map",
   )
 ];
