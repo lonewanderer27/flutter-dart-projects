@@ -70,7 +70,7 @@ class _QuizState extends State<Quiz> {
 
   void _finishQuiz() {
     // check if there are still null values in answers list
-    if (_unansweredQuestions()) {
+    if (_unansweredQuestions() == true) {
       // if there is, warn the user
       _incompleteAnswersDialog(context);
     }
@@ -78,7 +78,20 @@ class _QuizState extends State<Quiz> {
 
   void _submitQuiz() {
     setState(() {
-      _activeScreen = const ResultScreen();
+      _activeScreen = ResultScreen(
+          questions: _questions,
+          answers: _answers.whereType<Answer>().toList(),
+          restartQuiz: _restartQuiz);
+    });
+  }
+
+  void _restartQuiz() {
+    setState(() {
+      // empty the answers array
+      _answers = [];
+
+      // set the active screen to the start screen
+      _activeScreen = StartScreen(_startQuiz);
     });
   }
 
