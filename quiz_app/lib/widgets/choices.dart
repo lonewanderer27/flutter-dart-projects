@@ -7,7 +7,7 @@ import 'package:quiz_app/models/question.dart';
 import 'package:quiz_app/models/true_false_question.dart';
 import 'package:quiz_app/widgets/answer_button.dart';
 
-class Choices extends StatelessWidget {
+class Choices extends StatefulWidget {
   const Choices(
       {super.key,
       required this.question,
@@ -19,8 +19,35 @@ class Choices extends StatelessWidget {
   final void Function(String answer) setAnswer;
 
   @override
+  State<Choices> createState() => _ChoicesState();
+}
+
+class _ChoicesState extends State<Choices> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.text = widget.answer?.userAnswer;
+  }
+
+  @override
+  void didUpdateWidget(covariant Choices oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.answer?.userAnswer != widget.answer?.userAnswer) {
+      _controller.text = widget.answer?.userAnswer;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    debugPrint("Answer: ${answer?.userAnswer}");
+    debugPrint("Answer: ${widget.answer?.userAnswer}");
 
     return Padding(
       padding: EdgeInsets.all(20),
@@ -29,56 +56,64 @@ class Choices extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (question is MultipleChoiceQuestion) ...[
-              ...(question as MultipleChoiceQuestion)
-                  .answers
-                  .map((opt) {
+            if (widget.question is MultipleChoiceQuestion) ...[
+              ...(widget.question as MultipleChoiceQuestion).answers.map((opt) {
                 return Padding(
                     padding: EdgeInsets.symmetric(vertical: 5),
                     child: AnswerButton(
                         label: opt,
                         onPressed: () {
-                          setAnswer(opt);
+                          widget.setAnswer(opt);
                         },
-                        selected: answer?.userAnswer == opt));
+                        selected: widget.answer?.userAnswer == opt));
               })
             ],
-            if (question is TrueFalseQuestion) ...[
+            if (widget.question is TrueFalseQuestion) ...[
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5),
                 child: AnswerButton(
                   label: 'True',
                   onPressed: () {
-                    setAnswer(true.toString());
+                    widget.setAnswer(true.toString());
                   },
-                  selected: answer?.userAnswer == true.toString(),
+                  selected: widget.answer?.userAnswer == true.toString(),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5),
                 child: AnswerButton(
-                    label: 'False',
-                    onPressed: () {
-                      setAnswer(false.toString());
-                    },
-                    selected: answer?.userAnswer == false.toString(),
+                  label: 'False',
+                  onPressed: () {
+                    widget.setAnswer(false.toString());
+                  },
+                  selected: widget.answer?.userAnswer == false.toString(),
                 ),
               )
             ],
-            if (question is FillInTheBlankQuestion) ...[
+            if (widget.question is FillInTheBlankQuestion) ...[
               TextField(
                 style: TextStyle(color: Colors.white),
+                controller: _controller,
+                onChanged: (value) {
+                  setState(() {
+                    widget.setAnswer(value);
+                  });
+                },
               )
             ],
-            if (question is OrderingQuestion) ...[
+            if (widget.question is OrderingQuestion) ...[
               Padding(
                 padding: EdgeInsets.only(bottom: 30),
                 child: Text(
-                  (question as OrderingQuestion).shuffledAnswers.join(', '),
+                  (widget.question as OrderingQuestion)
+                      .shuffledAnswers
+                      .join(', '),
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
-              ...(question as OrderingQuestion).shuffledAnswers.map((opt) {
+              ...(widget.question as OrderingQuestion)
+                  .shuffledAnswers
+                  .map((opt) {
                 return TextField(
                   style: TextStyle(color: Colors.white),
                 );
