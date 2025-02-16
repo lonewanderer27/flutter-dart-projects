@@ -10,7 +10,7 @@ class FillInTheBlankQuestion extends Question {
   @override
   bool checkAnswer(dynamic answer) {
     if (answer is String) {
-      return answer == correctAnswer;
+      return (answer == correctAnswer || answer.contains(correctAnswer));
     }
 
     return false;
