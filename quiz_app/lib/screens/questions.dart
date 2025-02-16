@@ -1,37 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quiz_app/data/questions.dart';
+import 'package:quiz_app/models/answer.dart';
 import 'package:quiz_app/models/question.dart';
 import 'package:quiz_app/widgets/choices.dart';
 
 class Questions extends StatefulWidget {
-  const Questions({super.key});
+  final List<Question> questions;
+  final List<Answer> answers;
+  final void Function(String answer, Question question, int no) chooseAnswer;
+  const Questions(
+      {super.key,
+      required this.questions,
+      required this.answers,
+      required this.chooseAnswer});
 
   @override
   State<Questions> createState() => _QuestionsState();
 }
 
 class _QuestionsState extends State<Questions> {
+  late List<Question> _questions;
+  late List<Answer> _answers;
   int currentNo = 0;
   late Question currentQuestion;
 
   @override
   void initState() {
     super.initState();
-    // shuffle questions
-    questions.shuffle();
+    _questions = widget.questions;
+    _answers = widget.answers;
 
-    currentQuestion = questions.elementAt(currentNo);
+    currentQuestion = _questions.elementAt(currentNo);
   }
 
   void _setAnswer(String answer) {
-    print('Q: ${currentQuestion.questionText}\nUser: $answer');
+    setState(() {
+      widget.chooseAnswer(answer, currentQuestion, currentNo);
+    });
   }
 
   void _updateQuestion() {
     setState(() {
-      currentQuestion = questions.elementAt(currentNo);
-      print('Current question: $currentQuestion');
+      currentQuestion = _questions.elementAt(currentNo);
+      debugPrint('Current question: $currentQuestion');
     });
   }
 
@@ -44,13 +55,13 @@ class _QuestionsState extends State<Questions> {
 
   void _lastQuestion() {
     setState(() {
-      currentNo = questions.length - 1;
+      currentNo = _questions.length - 1;
       _updateQuestion();
     });
   }
 
   void _nextQuestion() {
-    if (currentNo == questions.length - 1) return;
+    if (currentNo == _questions.length - 1) return;
     setState(() {
       currentNo++;
       _updateQuestion();
@@ -75,7 +86,7 @@ class _QuestionsState extends State<Questions> {
           children: [
             Column(
               children: [
-                Text('Question ${currentNo + 1} out of ${questions.length}',
+                Text('Question ${currentNo + 1} out of ${_questions.length}',
                     style: TextStyle(color: Colors.white))
               ],
             ),
@@ -89,7 +100,10 @@ class _QuestionsState extends State<Questions> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 30),
-                Choices(question: currentQuestion, setAnswer: _setAnswer),
+                Choices(
+                    question: currentQuestion,
+                    setAnswer: _setAnswer,
+                    answer: _answers.elementAtOrNull(currentNo)),
                 SizedBox(height: 30),
               ],
             ),
@@ -117,14 +131,14 @@ class _QuestionsState extends State<Questions> {
                     Row(
                       children: [
                         ElevatedButton.icon(
-                            onPressed: currentNo == questions.length - 1
+                            onPressed: currentNo == _questions.length - 1
                                 ? null
                                 : _nextQuestion,
                             label: Text('Next')),
                         Padding(
                           padding: EdgeInsets.only(left: 10),
                           child: IconButton(
-                            onPressed: currentNo == questions.length - 1
+                            onPressed: currentNo == _questions.length - 1
                                 ? null
                                 : _lastQuestion,
                             icon: Icon(Icons.last_page),

@@ -1,7 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:quiz_app/models/answer.dart';
 import 'package:quiz_app/models/fill_in_the_blank_question.dart';
 import 'package:quiz_app/models/multiple_choice_question.dart';
 import 'package:quiz_app/models/ordering_question.dart';
@@ -10,13 +8,20 @@ import 'package:quiz_app/models/true_false_question.dart';
 import 'package:quiz_app/widgets/answer_button.dart';
 
 class Choices extends StatelessWidget {
-  const Choices({super.key, required this.question, required this.setAnswer});
+  const Choices(
+      {super.key,
+      required this.question,
+      required this.setAnswer,
+      this.answer});
 
   final Question question;
-  final void Function(String) setAnswer;
+  final Answer? answer;
+  final void Function(String answer) setAnswer;
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Answer: ${answer?.userAnswer}");
+
     return Padding(
       padding: EdgeInsets.all(20),
       child: Center(
@@ -26,7 +31,7 @@ class Choices extends StatelessWidget {
           children: [
             if (question is MultipleChoiceQuestion) ...[
               ...(question as MultipleChoiceQuestion)
-                  .getShuffledAnswers
+                  .answers
                   .map((opt) {
                 return Padding(
                     padding: EdgeInsets.symmetric(vertical: 5),
@@ -34,25 +39,30 @@ class Choices extends StatelessWidget {
                         label: opt,
                         onPressed: () {
                           setAnswer(opt);
-                        }));
+                        },
+                        selected: answer?.userAnswer == opt));
               })
             ],
             if (question is TrueFalseQuestion) ...[
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5),
                 child: AnswerButton(
-                    label: 'True',
-                    onPressed: () {
-                      setAnswer('true');
-                    }),
+                  label: 'True',
+                  onPressed: () {
+                    setAnswer(true.toString());
+                  },
+                  selected: answer?.userAnswer == true.toString(),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5),
                 child: AnswerButton(
                     label: 'False',
                     onPressed: () {
-                      setAnswer('false');
-                    }),
+                      setAnswer(false.toString());
+                    },
+                    selected: answer?.userAnswer == false.toString(),
+                ),
               )
             ],
             if (question is FillInTheBlankQuestion) ...[
