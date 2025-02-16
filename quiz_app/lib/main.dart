@@ -15,6 +15,6 @@ class QuizApp extends StatefulWidget {
 class _QuizAppState extends State<QuizApp> {
   @override
   Widget build(BuildContext context) {
-    return Quiz();
+    return MaterialApp(home: Quiz());
   }
 }

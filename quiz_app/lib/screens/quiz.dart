@@ -17,7 +17,7 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   late List<Question> _questions;
-  late List<Answer> _answers;
+  late List<Answer?> _answers;
   late Widget _activeScreen;
 
   void _chooseAnswer(String answer, Question question, int no) {
@@ -53,18 +53,30 @@ class _QuizState extends State<Quiz> {
       // _answers = List.filled(_questions.length,
       //     _ => Answer(question: questions[0], userAnswer: '', no: index),
       //     growable: true);
-      _answers = List.generate(_questions.length,
-          (_) => Answer(question: questions[0], userAnswer: ''));
+      _answers = List.generate(_questions.length, (_) => null);
 
       // instantiate our new questions screen
       _activeScreen = Questions(
           questions: _questions,
           answers: _answers,
-          chooseAnswer: _chooseAnswer);
+          chooseAnswer: _chooseAnswer,
+          finishQuiz: _finishQuiz);
     });
   }
 
+  bool _unansweredQuestions() {
+    return _answers.any((q) => q == null);
+  }
+
   void _finishQuiz() {
+    // check if there are still null values in answers list
+    if (_unansweredQuestions()) {
+      // if there is, warn the user
+      _incompleteAnswersDialog(context);
+    }
+  }
+
+  void _submitQuiz() {
     setState(() {
       _activeScreen = const ResultScreen();
     });
@@ -78,17 +90,35 @@ class _QuizState extends State<Quiz> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [
-            Colors.deepPurple,
-            Color.fromARGB(255, 107, 15, 168)
-          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-          child: _activeScreen,
-        ),
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: const LinearGradient(
+                colors: [Colors.deepPurple, Color.fromARGB(255, 107, 15, 168)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter)),
+        child: _activeScreen,
       ),
     );
+  }
+
+  Future<void> _incompleteAnswersDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Incomplete Answers'),
+            content: const Text(
+                'Some questions are still unanswered. Take a moment to complete them!'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Review Answers')),
+              TextButton(onPressed: _submitQuiz, child: Text('Submit Anyway'))
+            ],
+          );
+        });
   }
 }

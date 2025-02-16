@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quiz_app/data/questions.dart';
 import 'package:quiz_app/models/answer.dart';
 import 'package:quiz_app/models/question.dart';
 import 'package:quiz_app/widgets/choices.dart';
 
 class Questions extends StatefulWidget {
   final List<Question> questions;
-  final List<Answer> answers;
+  final List<Answer?> answers;
+  final void Function() finishQuiz;
   final void Function(String answer, Question question, int no) chooseAnswer;
   const Questions(
       {super.key,
       required this.questions,
       required this.answers,
-      required this.chooseAnswer});
+      required this.chooseAnswer,
+      required this.finishQuiz});
 
   @override
   State<Questions> createState() => _QuestionsState();
@@ -20,7 +23,7 @@ class Questions extends StatefulWidget {
 
 class _QuestionsState extends State<Questions> {
   late List<Question> _questions;
-  late List<Answer> _answers;
+  late List<Answer?> _answers;
   int currentNo = 0;
   late Question currentQuestion;
 
@@ -129,26 +132,32 @@ class _QuestionsState extends State<Questions> {
                         )
                       ],
                     ),
-                    Row(
-                      children: [
-                        ElevatedButton.icon(
-                            onPressed: currentNo == _questions.length - 1
-                                ? null
-                                : _nextQuestion,
-                            label: Text('Next')),
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: IconButton(
-                            onPressed: currentNo == _questions.length - 1
-                                ? null
-                                : _lastQuestion,
-                            icon: Icon(Icons.last_page),
-                            style: IconButton.styleFrom(
-                                foregroundColor: Colors.white),
-                          ),
-                        )
-                      ],
-                    )
+                    currentNo != questions.length - 1
+                        ? Row(
+                            children: [
+                              ElevatedButton.icon(
+                                  onPressed: currentNo == _questions.length - 1
+                                      ? null
+                                      : _nextQuestion,
+                                  label: Text('Next')),
+                              Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: IconButton(
+                                  onPressed: currentNo == _questions.length - 1
+                                      ? null
+                                      : _lastQuestion,
+                                  icon: Icon(Icons.last_page),
+                                  style: IconButton.styleFrom(
+                                      foregroundColor: Colors.white),
+                                ),
+                              )
+                            ],
+                          )
+                        : Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: ElevatedButton(
+                                onPressed: widget.finishQuiz, child: Text('Submit Quiz')),
+                          )
                   ],
                 )
               ],
