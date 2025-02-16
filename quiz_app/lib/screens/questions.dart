@@ -86,8 +86,9 @@ class _QuestionsState extends State<Questions> {
           children: [
             Column(
               children: [
+                SizedBox(height: 20),
                 Text('Question ${currentNo + 1} out of ${_questions.length}',
-                    style: TextStyle(color: Colors.white))
+                    style: TextStyle(color: Colors.white, fontSize: 15))
               ],
             ),
             Column(
