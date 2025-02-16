@@ -24,13 +24,17 @@ class Choices extends StatefulWidget {
 
 class _ChoicesState extends State<Choices> {
   late final Answer? answer;
-  final TextEditingController _fillInTheBlankController = TextEditingController();
+  final TextEditingController _fillInTheBlankController =
+      TextEditingController();
 
   @override
   void initState() {
     super.initState();
     answer = widget.answer;
-    if (answer == null) return;
+    if (answer == null) {
+      _fillInTheBlankController.text = '';
+      return;
+    }
 
     _fillInTheBlankController.text = answer?.userAnswer;
   }
@@ -38,10 +42,9 @@ class _ChoicesState extends State<Choices> {
   @override
   void didUpdateWidget(covariant Choices oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (answer == null) return;
 
     if (oldWidget.answer?.userAnswer != widget.answer?.userAnswer) {
-      _fillInTheBlankController.text = widget.answer?.userAnswer;
+      _fillInTheBlankController.text = widget.answer?.userAnswer ?? '';
     }
   }
 
