@@ -12,6 +12,10 @@ class TrueFalseQuestion extends Question {
       return answer == correctAnswer;
     }
 
+    if (answer is String) {
+      return answer.contains(correctAnswer.toString());
+    }
+
     return false;
   }
 }
