@@ -128,5 +128,5 @@ var flutterQuestions = [
   ...multipleChoiceQuestions,
   ...trueFalseQuestions,
   ...fillInTheBlanksQuestions,
-  ...orderingQuestions
+  // ...orderingQuestions
 ];

@@ -125,5 +125,5 @@ var dartQuestions = [
   ...multipleChoiceQuestions,
   ...trueFalseQuestions,
   ...fillInTheBlanksQuestions,
-  ...orderingQuestions
+  // ...orderingQuestions
 ];
