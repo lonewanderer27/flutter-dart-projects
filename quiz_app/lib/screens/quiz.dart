@@ -84,7 +84,7 @@ class _QuizState extends State<Quiz> {
     setState(() {
       _activeScreen = ResultScreen(
           questions: _questions,
-          answers: _answers.whereType<Answer>().toList(),
+          answers: _answers.toList(),
           restartQuiz: _restartQuiz);
     });
   }

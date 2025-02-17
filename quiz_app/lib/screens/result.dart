@@ -10,11 +10,13 @@ class ResultScreen extends StatelessWidget {
       required this.restartQuiz,
       required this.questions});
   final List<Question> questions;
-  final List<Answer> answers;
+  final List<Answer?> answers;
   final void Function() restartQuiz;
 
-  List<Answer> _getCorrectAnswers() {
-    return answers.where((element) => element.isCorrect).toList();
+  List<Answer?> _getCorrectAnswers() {
+    return answers
+        .where((element) => element != null && element.isCorrect)
+        .toList();
   }
 
   @override
