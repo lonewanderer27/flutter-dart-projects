@@ -57,31 +57,25 @@ class AnswerResult extends StatelessWidget {
                         style: TextStyle(color: Colors.white),
                       )
                     // otherwise they either have a correct or wrong answer
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // show whether the user's answer was correct
-                          Text(
-                              '${answer!.isCorrect ? '✅' : '✖️'} ${answer?.userAnswer}',
-                              style: TextStyle(color: Colors.white)),
-                          if (question is MultipleChoiceQuestion &&
-                              answer?.isCorrect == false)
-                            Text(
-                                'Correct Answer: ${(question as MultipleChoiceQuestion).correctAnswer}',
-                                style: TextStyle(color: Colors.white)),
-                          if (question is TrueFalseQuestion &&
-                              answer?.isCorrect == false)
-                            Text(
-                                'Correct Answer: ${(question as TrueFalseQuestion).correctAnswer}',
-                                style: TextStyle(color: Colors.white)),
-                          if (question is FillInTheBlankQuestion &&
-                              answer?.isCorrect == false)
-                            Text(
-                              'Correct Answer: ${(question as FillInTheBlankQuestion).correctAnswer}',
-                              style: TextStyle(color: Colors.white),
-                            )
-                        ],
-                      )
+                    : Text(
+                        '${answer!.isCorrect ? '✅' : '✖️'} ${answer?.userAnswer}',
+                        style: TextStyle(color: Colors.white)),
+                if (question is MultipleChoiceQuestion &&
+                    (answer == null || answer?.isCorrect == false))
+                  Text(
+                      'Correct Answer: ${(question as MultipleChoiceQuestion).correctAnswer}',
+                      style: TextStyle(color: Colors.white)),
+                if (question is TrueFalseQuestion &&
+                    (answer == null || answer?.isCorrect == false))
+                  Text(
+                      'Correct Answer: ${(question as TrueFalseQuestion).correctAnswer}',
+                      style: TextStyle(color: Colors.white)),
+                if (question is FillInTheBlankQuestion &&
+                    (answer == null || answer?.isCorrect == false))
+                  Text(
+                    'Correct Answer: ${(question as FillInTheBlankQuestion).correctAnswer}',
+                    style: TextStyle(color: Colors.white),
+                  )
               ],
             ),
           )

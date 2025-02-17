@@ -36,7 +36,11 @@ class ResultScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      ...answers.asMap().entries.map((entry) {
+                      ...answers
+                          .asMap()
+                          .entries
+                          .where((entry) => entry.key < questions.length)
+                          .map((entry) {
                         var index = entry.key;
                         var value = entry.value;
                         return AnswerResult(
