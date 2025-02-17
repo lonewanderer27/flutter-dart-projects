@@ -73,7 +73,11 @@ class _QuizState extends State<Quiz> {
     if (_unansweredQuestions() == true) {
       // if there is, warn the user
       _incompleteAnswersDialog(context);
+      return;
     }
+
+    // all answers are complete, proceed with submission
+    _submitQuiz();
   }
 
   void _submitQuiz() {
