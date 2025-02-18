@@ -1,5 +1,5 @@
-import 'package:expense_tracker/data/expenses_data.dart';
 import 'package:expense_tracker/modals/expenses_modal.dart';
+import 'package:expense_tracker/models/expense.dart';
 import 'package:expense_tracker/widgets/expenses_chart.dart';
 import 'package:expense_tracker/widgets/expenses_list.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +16,24 @@ class ExpenseTrackerApp extends StatefulWidget {
 }
 
 class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
+  final List<Expense> _expenses = [];
+
+  void _addExpense(Expense expense) {
+    setState(() {
+      _expenses.add(expense);
+    });
+  }
+
   void _openAddExpenseModal() {
     // Flutter automatically adds a global context variable
     // that's why we can access this even though it's below.
     // We rename builder context as ctx as to not clash
     // with the global context variable.
     showModalBottomSheet(
-        context: context, builder: (ctx) => ExpensesModal());
+        context: context,
+        builder: (ctx) => ExpensesModal(
+              addExpense: _addExpense,
+            ));
   }
 
   @override
@@ -41,11 +52,11 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
           padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
           child: Column(
             children: [
-              ExpensesChart(expenses: expensesData),
+              ExpensesChart(expenses: _expenses),
               SizedBox(
                 height: 20,
               ),
-              Expanded(child: ExpensesList(expenses: expensesData))
+              Expanded(child: ExpensesList(expenses: _expenses))
             ],
           ),
         ),

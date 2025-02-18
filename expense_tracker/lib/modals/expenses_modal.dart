@@ -1,9 +1,12 @@
 import 'package:expense_tracker/enums/category.dart';
+import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ExpensesModal extends StatefulWidget {
-  const ExpensesModal({super.key});
+  final void Function(Expense expense) addExpense;
+
+  const ExpensesModal({super.key, required this.addExpense});
 
   @override
   State<ExpensesModal> createState() => _ExpensesModalState();
@@ -12,8 +15,9 @@ class ExpensesModal extends StatefulWidget {
 class _ExpensesModalState extends State<ExpensesModal> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
-  String? _date;
-  Category? _category = Category.leisure;
+  String? _dateStr;
+  DateTime? _dateTime;
+  Category _category = Category.leisure;
 
   @override
   void dispose() {
@@ -39,7 +43,9 @@ class _ExpensesModalState extends State<ExpensesModal> {
 
     // set the picked date
     setState(() {
-      _date = DateFormat('MMMM d, y').format(pickedDate);
+      // update the string date format for our custom indicator
+      _dateStr = DateFormat('MMMM d, y').format(pickedDate);
+      _dateTime = pickedDate;
     });
   }
 
@@ -53,7 +59,7 @@ class _ExpensesModalState extends State<ExpensesModal> {
     final titleInvalid = _titleController.text.trim().isEmpty;
 
     // check date
-    final dateInvalid = _date == null;
+    final dateInvalid = _dateStr == null;
 
     if (amountInvalid || titleInvalid || dateInvalid) {
       showDialog(
@@ -70,7 +76,21 @@ class _ExpensesModalState extends State<ExpensesModal> {
                       child: Text('OK'))
                 ],
               ));
+      return;
     }
+
+    // create an instance of expense
+    var newExpense = Expense(
+        amount: enteredAmt,
+        title: _titleController.text,
+        date: _dateTime!,
+        category: _category);
+
+    // add our new expense to the state
+    widget.addExpense(newExpense);
+
+    // dismiss this modal
+    Navigator.pop(context);
   }
 
   @override
@@ -100,7 +120,7 @@ class _ExpensesModalState extends State<ExpensesModal> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(_date ??= 'Select a date'),
+                      Text(_dateStr ??= 'Select a date'),
                       IconButton(
                           onPressed: _showDatePicker,
                           icon: Icon(Icons.calendar_month))
