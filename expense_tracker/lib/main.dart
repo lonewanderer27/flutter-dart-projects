@@ -24,6 +24,12 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
     });
   }
 
+  void _removeExpense(String id) {
+    setState(() {
+      _expenses.removeWhere((exp) => exp.id == id);
+    });
+  }
+
   void _openAddExpenseModal() {
     // Flutter automatically adds a global context variable
     // that's why we can access this even though it's below.
@@ -58,7 +64,11 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
               SizedBox(
                 height: 20,
               ),
-              Expanded(child: ExpensesList(expenses: _expenses))
+              Expanded(
+                  child: ExpensesList(
+                expenses: _expenses,
+                removeExpense: _removeExpense,
+              ))
             ],
           ),
         ),
