@@ -24,10 +24,27 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
     });
   }
 
-  void _removeExpense(String id) {
+  void _removeExpense(String id, int index) {
+    // store our removed expense temporarily
+    var removedExpense = _expenses.singleWhere((exp) => exp.id == id);
+
     setState(() {
       _expenses.removeWhere((exp) => exp.id == id);
     });
+
+    // show the snackbar
+    // if the user wants to bring back the removed expense, add it here
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      duration: const Duration(seconds: 3),
+      content: const Text('Expense deleted'),
+      action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              _expenses.insert(index, removedExpense);
+            });
+          }),
+    ));
   }
 
   void _openAddExpenseModal() {
