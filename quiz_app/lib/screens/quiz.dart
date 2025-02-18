@@ -72,21 +72,46 @@ class _QuizState extends State<Quiz> {
     // check if there are still null values in answers list
     if (_unansweredQuestions() == true) {
       // if there is, warn the user
-      _incompleteAnswersDialog(context);
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Incomplete Answers'),
+              content: const Text(
+                  'Some questions are still unanswered. Take a moment to complete them!'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Review Answers')),
+                TextButton(
+                    onPressed: () {
+                      _submitQuiz(context);
+                    },
+                    child: Text('Submit Anyway'))
+              ],
+            );
+          });
       return;
     }
 
     // all answers are complete, proceed with submission
-    _submitQuiz();
+    _submitQuiz(null);
   }
 
-  void _submitQuiz() {
+  void _submitQuiz(BuildContext? ctx) {
     setState(() {
       _activeScreen = ResultScreen(
           questions: _questions,
           answers: _answers.toList(),
           restartQuiz: _restartQuiz);
     });
+
+    if (ctx == null) return;
+
+    // dismiss the modal
+    Navigator.pop(ctx);
   }
 
   void _restartQuiz() {
@@ -117,25 +142,5 @@ class _QuizState extends State<Quiz> {
         child: _activeScreen,
       ),
     );
-  }
-
-  Future<void> _incompleteAnswersDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Incomplete Answers'),
-            content: const Text(
-                'Some questions are still unanswered. Take a moment to complete them!'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Review Answers')),
-              TextButton(onPressed: _submitQuiz, child: Text('Submit Anyway'))
-            ],
-          );
-        });
   }
 }
