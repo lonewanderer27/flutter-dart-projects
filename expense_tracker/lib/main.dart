@@ -30,6 +30,8 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
     // We rename builder context as ctx as to not clash
     // with the global context variable.
     showModalBottomSheet(
+        // make our bottom sheet fullscreen
+        isScrollControlled: true,
         context: context,
         builder: (ctx) => ExpensesModal(
               addExpense: _addExpense,
