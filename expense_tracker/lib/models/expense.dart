@@ -1,0 +1,27 @@
+
+import 'package:expense_tracker/enums/category.dart';
+import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
+
+final dateFormatter = DateFormat.yMd();
+
+final Uuid uuid = Uuid();
+
+class Expense {
+  Expense(
+      {required this.amount,
+      required this.title,
+      required this.date,
+      required this.category})
+      : id = uuid.v4();
+
+  String get formattedDate {
+    return dateFormatter.format(date);
+  }
+
+  final String id;
+  final String title;
+  final double amount;
+  final DateTime date;
+  final Category category;
+}
