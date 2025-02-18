@@ -46,6 +46,17 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = Center(
+      child: Text('No expenses found. Start adding some!'),
+    );
+
+    if (_expenses.isNotEmpty) {
+      mainContent = ExpensesList(
+        expenses: _expenses,
+        removeExpense: _removeExpense,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Expenses Tracker'),
@@ -64,11 +75,7 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
               SizedBox(
                 height: 20,
               ),
-              Expanded(
-                  child: ExpensesList(
-                expenses: _expenses,
-                removeExpense: _removeExpense,
-              ))
+              Expanded(child: mainContent)
             ],
           ),
         ),
