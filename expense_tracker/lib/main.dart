@@ -61,6 +61,7 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
     showModalBottomSheet(
         // make our bottom sheet fullscreen
         isScrollControlled: true,
+        useSafeArea: true,
         context: context,
         builder: (ctx) => ExpensesModal(
               addExpense: _addExpense,
