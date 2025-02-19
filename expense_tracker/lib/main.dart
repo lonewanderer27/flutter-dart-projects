@@ -90,17 +90,14 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
       ),
       body: Container(
         decoration: const BoxDecoration(),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-          child: Column(
-            children: [
-              Chart(expenses: _expenses),
-              SizedBox(
-                height: 20,
-              ),
-              Expanded(child: mainContent)
-            ],
-          ),
+        child: Column(
+          children: [
+            Chart(expenses: _expenses),
+            SizedBox(
+              height: 20,
+            ),
+            Expanded(child: mainContent)
+          ],
         ),
       ),
     );
