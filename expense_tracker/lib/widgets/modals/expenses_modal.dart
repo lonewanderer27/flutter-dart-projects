@@ -97,96 +97,168 @@ class _ExpensesModalState extends State<ExpensesModal> {
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
     final orientation = MediaQuery.of(context).orientation;
-    // we wrap with SizedBox then set our height conditionally
-    // if orientation is landscape, set height to double infinity to 
-    // make sure that it takes up all the available height on landscape
-    // but default to the just enough space it needs on portrait mode.
-    // 
-    // i want the UI elements to be as centered or close to our thumbs
-    // see: https://developer.samsung.com/one-ui/largescreen-and-foldable/large_screen_layout.html
-    // which was my inspiration lately in designing user interfaces.
-    return SizedBox(
-      height: orientation == Orientation.landscape ? double.infinity : null,
-      // we wrap with singlechildscrollview so that on landscape mode
-      // the user can still scroll the inputs up and down
-      child: SingleChildScrollView(
-        child: Padding(
-            padding: EdgeInsets.only(
-                top: 48, bottom: 20 + keyboardSpace, left: 20, right: 20),
-            child: Column(
-              children: [
-                TextField(
-                    controller: _titleController,
-                    maxLength: 50,
-                    decoration: InputDecoration(labelText: 'Title')),
-                Row(
-                  children: [
-                    Expanded(
-                        child: TextField(
-                      controller: _amountController,
-                      keyboardType: TextInputType.number,
-                      decoration:
-                          InputDecoration(labelText: 'Amount', prefixText: '₱'),
-                    )),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(_dateStr ??= 'Select a date'),
-                          IconButton(
-                              onPressed: _showDatePicker,
-                              icon: Icon(Icons.calendar_month))
-                        ],
-                      ),
+
+    return LayoutBuilder(builder: (ctx, contraints) {
+      // we wrap with SizedBox then set our height conditionally
+      // if orientation is landscape, set height to double infinity to
+      // make sure that it takes up all the available height on landscape
+      // but default to the just enough space it needs on portrait mode.
+      //
+      // i want the UI elements to be as centered or close to our thumbs
+      // see: https://developer.samsung.com/one-ui/largescreen-and-foldable/large_screen_layout.html
+      // which was my inspiration lately in designing user interfaces.
+      return SizedBox(
+        height: orientation == Orientation.landscape ? double.infinity : null,
+        // we wrap with singlechildscrollview so that on landscape mode
+        // the user can still scroll the inputs up and down
+        child: SingleChildScrollView(
+          child: Padding(
+              padding: EdgeInsets.only(
+                  top: 48, bottom: 20 + keyboardSpace, left: 20, right: 20),
+              child: orientation == Orientation.portrait
+                  ? Column(
+                      children: [
+                        TextField(
+                            controller: _titleController,
+                            maxLength: 50,
+                            decoration: InputDecoration(labelText: 'Title')),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: TextField(
+                              controller: _amountController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  labelText: 'Amount', prefixText: '₱ '),
+                            )),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(_dateStr ??= 'Select a date'),
+                                  IconButton(
+                                      onPressed: _showDatePicker,
+                                      icon: Icon(Icons.calendar_month))
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Category:', style: TextStyle(fontSize: 15)),
+                            SizedBox(width: 30),
+                            Expanded(
+                              child: DropdownButton(
+                                items: Category.values
+                                    .map((category) => DropdownMenuItem(
+                                        value: category,
+                                        child:
+                                            Text(category.name.toUpperCase())))
+                                    .toList(),
+                                onChanged: (selected) {
+                                  if (selected == null) return;
+                                  setState(() {
+                                    _category = selected;
+                                  });
+                                },
+                                value: _category,
+                              ),
+                            ),
+                            SizedBox(width: 20)
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: TextButton(
+                                    onPressed: _close, child: Text('Cancel'))),
+                            SizedBox(width: 10),
+                            Expanded(
+                                child: ElevatedButton(
+                                    onPressed: _submitExpense,
+                                    child: Text('Save')))
+                          ],
+                        ),
+                      ],
                     )
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Category:', style: TextStyle(fontSize: 15)),
-                    SizedBox(width: 30),
-                    Expanded(
-                      child: DropdownButton(
-                        items: Category.values
-                            .map((category) => DropdownMenuItem(
-                                value: category,
-                                child: Text(category.name.toUpperCase())))
-                            .toList(),
-                        onChanged: (selected) {
-                          if (selected == null) return;
-                          setState(() {
-                            _category = selected;
-                          });
-                        },
-                        value: _category,
-                      ),
-                    ),
-                    SizedBox(width: 20)
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                        child: TextButton(
-                            onPressed: _close, child: Text('Cancel'))),
-                    SizedBox(width: 10),
-                    Expanded(
-                        child: ElevatedButton(
-                            onPressed: _submitExpense, child: Text('Save')))
-                  ],
-                ),
-              ],
-            )),
-      ),
-    );
+                  : Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Column(
+                              children: [
+                                SizedBox(height: 20),
+                                TextField(
+                                    controller: _titleController,
+                                    maxLength: 50,
+                                    decoration:
+                                        InputDecoration(labelText: 'Title'))
+                              ],
+                            )),
+                            SizedBox(width: 20),
+                            Expanded(
+                                child: TextField(
+                              controller: _amountController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  labelText: 'Amount', prefixText: '₱ '),
+                            ))
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            TextButton.icon(
+                                onPressed: _showDatePicker,
+                                icon: Icon(Icons.calendar_month),
+                                label: Text('Select a date')),
+                            SizedBox(width: 20),
+                            Expanded(
+                                child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Category:',
+                                    style: TextStyle(fontSize: 15)),
+                                SizedBox(width: 20),
+                                DropdownButton(
+                                  items: Category.values
+                                      .map((category) => DropdownMenuItem(
+                                          value: category,
+                                          child: Text(
+                                              category.name.toUpperCase())))
+                                      .toList(),
+                                  onChanged: (selected) {
+                                    if (selected == null) return;
+                                    setState(() {
+                                      _category = selected;
+                                    });
+                                  },
+                                  value: _category,
+                                ),
+                              ],
+                            )),
+                            TextButton(
+                                onPressed: _close, child: Text('Cancel')),
+                            SizedBox(width: 10),
+                            ElevatedButton(
+                                onPressed: _submitExpense, child: Text('Save'))
+                          ],
+                        ),
+                      ],
+                    )),
+        ),
+      );
+    });
   }
 }
