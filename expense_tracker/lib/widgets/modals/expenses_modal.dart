@@ -95,80 +95,83 @@ class _ExpensesModalState extends State<ExpensesModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.only(top: 48, bottom: 20, left: 20, right: 20),
-        child: Column(
-          children: [
-            TextField(
-                controller: _titleController,
-                maxLength: 50,
-                decoration: InputDecoration(labelText: 'Title')),
-            Row(
-              children: [
-                Expanded(
-                    child: TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  decoration:
-                      InputDecoration(labelText: 'Amount', prefixText: '₱'),
-                )),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(_dateStr ??= 'Select a date'),
-                      IconButton(
-                          onPressed: _showDatePicker,
-                          icon: Icon(Icons.calendar_month))
-                    ],
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+    return SingleChildScrollView(
+      child: Padding(
+          padding: EdgeInsets.only(top: 48, bottom: 20 + keyboardSpace, left: 20, right: 20),
+          child: Column(
+            children: [
+              TextField(
+                  controller: _titleController,
+                  maxLength: 50,
+                  decoration: InputDecoration(labelText: 'Title')),
+              Row(
+                children: [
+                  Expanded(
+                      child: TextField(
+                    controller: _amountController,
+                    keyboardType: TextInputType.number,
+                    decoration:
+                        InputDecoration(labelText: 'Amount', prefixText: '₱'),
+                  )),
+                  SizedBox(
+                    width: 10,
                   ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Category:', style: TextStyle(fontSize: 15)),
-                SizedBox(width: 30),
-                Expanded(
-                  child: DropdownButton(
-                    items: Category.values
-                        .map((category) => DropdownMenuItem(
-                            value: category,
-                            child: Text(category.name.toUpperCase())))
-                        .toList(),
-                    onChanged: (selected) {
-                      if (selected == null) return;
-                      setState(() {
-                        _category = selected;
-                      });
-                    },
-                    value: _category,
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(_dateStr ??= 'Select a date'),
+                        IconButton(
+                            onPressed: _showDatePicker,
+                            icon: Icon(Icons.calendar_month))
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Category:', style: TextStyle(fontSize: 15)),
+                  SizedBox(width: 30),
+                  Expanded(
+                    child: DropdownButton(
+                      items: Category.values
+                          .map((category) => DropdownMenuItem(
+                              value: category,
+                              child: Text(category.name.toUpperCase())))
+                          .toList(),
+                      onChanged: (selected) {
+                        if (selected == null) return;
+                        setState(() {
+                          _category = selected;
+                        });
+                      },
+                      value: _category,
+                    ),
                   ),
-                ),
-                SizedBox(width: 20)
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                    child:
-                        TextButton(onPressed: _close, child: Text('Cancel'))),
-                SizedBox(width: 10),
-                Expanded(
-                    child: ElevatedButton(
-                        onPressed: _submitExpense, child: Text('Save')))
-              ],
-            ),
-          ],
-        ));
+                  SizedBox(width: 20)
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                      child:
+                          TextButton(onPressed: _close, child: Text('Cancel'))),
+                  SizedBox(width: 10),
+                  Expanded(
+                      child: ElevatedButton(
+                          onPressed: _submitExpense, child: Text('Save')))
+                ],
+              ),
+            ],
+          )),
+    );
   }
 }
