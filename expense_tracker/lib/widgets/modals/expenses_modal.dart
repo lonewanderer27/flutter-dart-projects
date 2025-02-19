@@ -101,6 +101,10 @@ class _ExpensesModalState extends State<ExpensesModal> {
     // if orientation is landscape, set height to double infinity to 
     // make sure that it takes up all the available height on landscape
     // but default to the just enough space it needs on portrait mode.
+    // 
+    // i want the UI elements to be as centered or close to our thumbs
+    // see: https://developer.samsung.com/one-ui/largescreen-and-foldable/large_screen_layout.html
+    // which was my inspiration lately in designing user interfaces.
     return SizedBox(
       height: orientation == Orientation.landscape ? double.infinity : null,
       // we wrap with singlechildscrollview so that on landscape mode
