@@ -1,5 +1,5 @@
 import 'package:expense_tracker/modals/expenses_modal.dart';
-import 'package:expense_tracker/models/expense.dart';
+import 'package:expense_tracker/widgets/models/expense.dart';
 import 'package:expense_tracker/theme/colorScheme.dart';
 import 'package:expense_tracker/theme/theme.dart';
 import 'package:expense_tracker/widgets/chart.dart';
