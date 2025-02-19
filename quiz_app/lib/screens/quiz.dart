@@ -84,7 +84,7 @@ class _QuizState extends State<Quiz> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Review Answers')),
+                    child: Text('Review')),
                 TextButton(
                     onPressed: () {
                       _submitQuiz(context);
