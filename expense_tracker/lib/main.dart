@@ -2,6 +2,7 @@ import 'package:expense_tracker/modals/expenses_modal.dart';
 import 'package:expense_tracker/models/expense.dart';
 import 'package:expense_tracker/theme/colorScheme.dart';
 import 'package:expense_tracker/theme/theme.dart';
+import 'package:expense_tracker/widgets/chart.dart';
 import 'package:expense_tracker/widgets/expenses_chart.dart';
 import 'package:expense_tracker/widgets/expenses_list.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +95,7 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
           padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
           child: Column(
             children: [
-              ExpensesChart(expenses: _expenses),
+              Chart(expenses: _expenses),
               SizedBox(
                 height: 20,
               ),
