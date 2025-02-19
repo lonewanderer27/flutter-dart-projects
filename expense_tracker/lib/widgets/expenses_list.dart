@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 
 class ExpensesList extends StatelessWidget {
   final void Function(String id, int index) removeExpense;
+  final void Function(String id, int index) editExpense;
   const ExpensesList(
-      {super.key, required this.expenses, required this.removeExpense});
+      {super.key,
+      required this.expenses,
+      required this.removeExpense,
+      required this.editExpense});
 
   final List<Expense> expenses;
 
@@ -27,7 +31,12 @@ class ExpensesList extends StatelessWidget {
           ),
         ),
         key: Key(expenses[index].id),
-        child: ExpenseItem(expense: expenses[index]),
+        child: InkWell(
+          onTap: () {
+            editExpense(expenses[index].id, index);
+          },
+          child: ExpenseItem(expense: expenses[index]),
+        ),
         onDismissed: (direction) {
           removeExpense(expenses[index].id, index);
         });

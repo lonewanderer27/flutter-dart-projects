@@ -6,7 +6,21 @@ import 'package:intl/intl.dart';
 class ExpensesModal extends StatefulWidget {
   final void Function(Expense expense) addExpense;
 
-  const ExpensesModal({super.key, required this.addExpense});
+  // edit related functionality
+  final void Function(Expense expense, int id)? editExpense;
+  final bool? update;
+  final Expense? expense;
+  final int? index;
+
+  const ExpensesModal(
+      {super.key,
+      required this.addExpense,
+
+      // edit related functionality
+      this.expense,
+      this.editExpense,
+      this.update,
+      this.index});
 
   @override
   State<ExpensesModal> createState() => _ExpensesModalState();
@@ -86,11 +100,36 @@ class _ExpensesModalState extends State<ExpensesModal> {
         date: _dateTime!,
         category: _category);
 
-    // add our new expense to the state
-    widget.addExpense(newExpense);
+    // if we're on editing mode
+    if (widget.update == true) {
+      widget.editExpense!(newExpense, widget.index!);
+    } else {
+      // add our new expense to the state
+      widget.addExpense(newExpense);
+    }
 
     // dismiss this modal
     Navigator.pop(context);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // if update is set, then we must restore all the values to the appropriate input boxes
+    if (widget.update == false) return;
+
+    // restore title
+    _titleController.text = widget.expense!.title;
+
+    // restore amount
+    _amountController.text = widget.expense!.amount.toString();
+
+    // restore category
+    _category = widget.expense!.category;
+
+    // restore date
+    _dateTime = widget.expense!.date;
+    _dateStr = DateFormat('MMMM d, y').format(widget.expense!.date);
   }
 
   @override
@@ -118,8 +157,9 @@ class _ExpensesModalState extends State<ExpensesModal> {
               child: Column(
                 children: [
                   Center(
-                    child:
-                        Text('Add new expense', style: TextStyle(fontSize: 20)),
+                    child: Text(
+                        widget.update == true ? 'Edit Expense' : 'New Expense',
+                        style: TextStyle(fontSize: 20)),
                   ),
                   orientation == Orientation.portrait
                       ? Column(

@@ -30,6 +30,13 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
     });
   }
 
+  void _updateExpense(Expense expense, int index) {
+    // replace the expense object at the index
+    setState(() {
+      _expenses[index] = expense;
+    });
+  }
+
   void _removeExpense(String id, int index) {
     // store our removed expense temporarily
     var removedExpense = _expenses.singleWhere((exp) => exp.id == id);
@@ -53,7 +60,7 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
     ));
   }
 
-  void _openAddExpenseModal() {
+  void _openExpenseModal({bool edit = false, Expense? expense, int? index}) {
     // Flutter automatically adds a global context variable
     // that's why we can access this even though it's below.
     // We rename builder context as ctx as to not clash
@@ -64,8 +71,18 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
         useSafeArea: true,
         context: context,
         builder: (ctx) => ExpensesModal(
-              addExpense: _addExpense,
-            ));
+            addExpense: _addExpense,
+            editExpense: _updateExpense,
+            update: edit,
+            expense: expense,
+            index: index));
+  }
+
+  void _openEditExpenseModal(String id, int index) {
+    // find the expense object
+    var expense = _expenses.firstWhere((exp) => exp.id == id);
+
+    _openExpenseModal(edit: true, expense: expense, index: index);
   }
 
   @override
@@ -89,8 +106,7 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
       appBar: AppBar(
         title: Text('Expenses Tracker'),
         actions: [
-          IconButton(
-              onPressed: _openAddExpenseModal, icon: const Icon(Icons.add))
+          IconButton(onPressed: _openExpenseModal, icon: const Icon(Icons.add))
         ],
       ),
       body: Container(
@@ -112,6 +128,7 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
                           child: ExpensesList(
                         expenses: _expenses,
                         removeExpense: _removeExpense,
+                        editExpense: _openEditExpenseModal,
                       ))
                     ],
                   )
@@ -129,6 +146,7 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
                           child: ExpensesList(
                         expenses: _expenses,
                         removeExpense: _removeExpense,
+                        editExpense: _openEditExpenseModal,
                       ))
                     ],
                   ),
