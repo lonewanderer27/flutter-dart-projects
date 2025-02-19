@@ -1,9 +1,9 @@
 import 'package:expense_tracker/constants/category_icons.dart';
 import 'package:expense_tracker/enums/category.dart';
-import 'package:expense_tracker/widgets/models/expense_bucket.dart';
+import 'package:expense_tracker/models/expense_bucket.dart';
 import 'package:expense_tracker/widgets/chart_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:expense_tracker/widgets/models/expense.dart';
+import 'package:expense_tracker/models/expense.dart';
 
 class Chart extends StatelessWidget {
   const Chart({super.key, required this.expenses});

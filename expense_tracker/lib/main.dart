@@ -1,5 +1,5 @@
-import 'package:expense_tracker/modals/expenses_modal.dart';
-import 'package:expense_tracker/widgets/models/expense.dart';
+import 'package:expense_tracker/widgets/modals/expenses_modal.dart';
+import 'package:expense_tracker/models/expense.dart';
 import 'package:expense_tracker/theme/colorScheme.dart';
 import 'package:expense_tracker/theme/theme.dart';
 import 'package:expense_tracker/widgets/chart.dart';
@@ -69,16 +69,20 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
 
   @override
   Widget build(BuildContext context) {
-    Widget mainContent = Center(
-      child: Text('No expenses found. Start adding some!'),
-    );
+    // if there's no expenses at all.
+    // show the empty message as mainContent
 
-    if (_expenses.isNotEmpty) {
-      mainContent = ExpensesList(
-        expenses: _expenses,
-        removeExpense: _removeExpense,
-      );
-    }
+    // otherwise, get the current width
+    // if it's wide enough, use the row layout
+    // else, use the default column.
+
+    var width = MediaQuery.of(context).size.width;
+
+    Widget emptyMessage = Center(
+      child: Text(
+        'No expenses found. Start adding some!',
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -90,15 +94,43 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
       ),
       body: Container(
         decoration: const BoxDecoration(),
-        child: Column(
-          children: [
-            Chart(expenses: _expenses),
-            SizedBox(
-              height: 20,
-            ),
-            Expanded(child: mainContent)
-          ],
-        ),
+        child: _expenses.isEmpty
+            ? emptyMessage
+            : width > 600
+                ? Row(
+                    children: [
+                      Expanded(child: Chart(expenses: _expenses)),
+                      SizedBox(
+                          // if width is greater than 600, we're in a row layout
+                          // therefore we need to set the width
+                          // width: 5,
+                          // otherwise if it's smaller, then we're in default column layout
+                          // therefore we need to set the height
+                          height: 5),
+                      Expanded(
+                          child: ExpensesList(
+                        expenses: _expenses,
+                        removeExpense: _removeExpense,
+                      ))
+                    ],
+                  )
+                : Column(
+                    children: [
+                      Chart(expenses: _expenses),
+                      SizedBox(
+                          // if width is greater than 600, we're in a row layout
+                          // therefore we need to set the width
+                          // width: 5,
+                          // otherwise if it's smaller, then we're in default column layout
+                          // therefore we need to set the height
+                          height: 5),
+                      Expanded(
+                          child: ExpensesList(
+                        expenses: _expenses,
+                        removeExpense: _removeExpense,
+                      ))
+                    ],
+                  ),
       ),
     );
   }
