@@ -1,12 +1,17 @@
 import 'package:expense_tracker/modals/expenses_modal.dart';
 import 'package:expense_tracker/models/expense.dart';
+import 'package:expense_tracker/theme/colorScheme.dart';
 import 'package:expense_tracker/theme/theme.dart';
 import 'package:expense_tracker/widgets/expenses_chart.dart';
 import 'package:expense_tracker/widgets/expenses_list.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MaterialApp(home: ExpenseTrackerApp(), theme: theme));
+  runApp(MaterialApp(
+    home: ExpenseTrackerApp(),
+    theme: theme,
+    darkTheme: ThemeData.dark().copyWith(colorScheme: kDarkColorScheme),
+  ));
 }
 
 class ExpenseTrackerApp extends StatefulWidget {
