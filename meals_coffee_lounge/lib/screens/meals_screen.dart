@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meals_coffee_lounge/models/meal.dart';
-import 'package:meals_coffee_lounge/widgets/meal_item.dart';
+import 'package:meals_coffee_lounge/widgets/meal_item/meal_item.dart';
 
 class MealsScreen extends StatelessWidget {
   const MealsScreen({super.key, required this.meals, required this.title});
