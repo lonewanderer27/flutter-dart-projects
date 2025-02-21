@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meals_coffee_lounge/data/meals.dart';
+import 'package:meals_coffee_lounge/screens/categories_screen.dart';
 import 'package:meals_coffee_lounge/screens/meals_screen.dart';
 import 'package:meals_coffee_lounge/theme/theme.dart';
 
@@ -14,7 +15,7 @@ class MealsByCFLApp extends StatelessWidget {
     return MaterialApp(
       title: 'Meals by CFL',
       theme: theme,
-      home: const HomeScreen(title: 'Meals by CFL'),
+      home: CategoriesScreen(),
     );
   }
 }

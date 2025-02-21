@@ -3,16 +3,16 @@ import 'package:meals_coffee_lounge/models/category.dart';
 
 class CategoryGridItem extends StatelessWidget {
   final Category category;
-  const CategoryGridItem({super.key, required this.category});
-
-  void _handleTap() {
-    // TODO: Change the active screen
-  }
+  final void Function(Category category) changeCategory;
+  const CategoryGridItem(
+      {super.key, required this.category, required this.changeCategory});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: _handleTap,
+      onTap: () {
+        changeCategory(category);
+      },
       splashColor: Theme.of(context).primaryColor,
       borderRadius: BorderRadius.circular(10),
       child: Container(
@@ -20,9 +20,9 @@ class CategoryGridItem extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             gradient: LinearGradient(colors: [
-          category.color.withAlpha((255 * 0.55).round()),
-          category.color.withAlpha((255 * 0.9).round())
-        ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
+              category.color.withAlpha((255 * 0.55).round()),
+              category.color.withAlpha((255 * 0.9).round())
+            ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
         child: Text(
           category.title,
           style: Theme.of(context)
