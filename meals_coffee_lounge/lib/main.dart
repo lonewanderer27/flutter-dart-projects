@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:meals_coffee_lounge/data/meals.dart';
+import 'package:meals_coffee_lounge/screens/meals_screen.dart';
 import 'package:meals_coffee_lounge/theme/theme.dart';
 
 void main() {
