@@ -1,6 +1,6 @@
 # Flutter Intro Bootcamp - Project
 
-This repository contains all the projects created while following Maximilian Schwarzmüller's Flutter & Dart - The Complete Guide [2023 Edition] bootcamp on Udemy. 
+This repository contains all the projects created while following Maximilian Schwarzmüller's Flutter & Dart - The Complete Guide [2023 Edition] course on Udemy. 
 
 The projects cover various aspects of Flutter development, including UI design, state management, and integration with backend services.
 
