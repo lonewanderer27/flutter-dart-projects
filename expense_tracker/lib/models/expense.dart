@@ -1,4 +1,3 @@
-
 import 'package:expense_tracker/enums/category.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -17,6 +16,23 @@ class Expense {
 
   String get formattedDate {
     return dateFormatter.format(date);
+  }
+
+  factory Expense.fromJSON(Map<String, dynamic> json) {
+    return Expense(
+        amount: json['amount'],
+        title: json['title'],
+        date: json['date'],
+        category: json['category']);
+  }
+
+  Map<String, dynamic> toJSON() {
+    return {
+      'amount': amount,
+      'title': title,
+      'date': date,
+      'category': category
+    };
   }
 
   final String id;
