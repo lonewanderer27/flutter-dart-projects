@@ -14,7 +14,7 @@ class CategoriesScreen extends StatelessWidget {
       var filteredMeals = availableMeals
           .where((meal) => meal.categories.contains(category.id))
           .toList();
-      return MealsScreen(meals: filteredMeals, title: "Category");
+      return MealsScreen(meals: filteredMeals, title: category.title);
     }));
   }
 
