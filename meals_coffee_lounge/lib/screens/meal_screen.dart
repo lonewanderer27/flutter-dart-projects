@@ -23,6 +23,32 @@ class MealScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        children: [
+                          if (meal.isGlutenFree)
+                            Padding(
+                              padding: EdgeInsets.only(right: 10),
+                              child: Chip(label: Text('Gluten Free')),
+                            ),
+                          if (meal.isLactoseFree)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Chip(label: Text('Lactose Free')),
+                            ),
+                          if (meal.isVegan)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Chip(label: Text('Vegan')),
+                            ),
+                          if (meal.isVegetarian)
+                            Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Chip(label: Text('Vegetarian'))),
+                        ],
+                      ),
+                    ),
                     Text(
                       'Ingredients',
                       style: TextStyle(
