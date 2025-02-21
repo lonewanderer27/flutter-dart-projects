@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:meals_coffee_lounge/models/meal.dart';
+import 'package:meals_coffee_lounge/screens/meal_screen.dart';
 import 'package:meals_coffee_lounge/widgets/meal_item_trait.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MealItem extends StatelessWidget {
   const MealItem({super.key, required this.meal});
   final Meal meal;
+
+  void _selectMeal(BuildContext context, Meal meal) {
+    Navigator.push(context, MaterialPageRoute(builder: (builder) {
+      return MealScreen(meal: meal);
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +21,9 @@ class MealItem extends StatelessWidget {
       margin: EdgeInsets.all(10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
+        onTap: () {
+          _selectMeal(context, meal);
+        },
         child: Stack(
           children: [
             FadeInImage(
