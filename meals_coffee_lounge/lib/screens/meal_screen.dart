@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meals_coffee_lounge/models/meal.dart';
+import 'package:meals_coffee_lounge/widgets/meal_item/meal_item_trait.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MealScreen extends StatelessWidget {
@@ -23,6 +24,24 @@ class MealScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      children: [
+                        MealItemTrait(
+                          icon: Icons.schedule,
+                          label: '${meal.duration.toString()} min',
+                        ),
+                        SizedBox(width: 10),
+                        MealItemTrait(
+                          icon: Icons.work_outline,
+                          label: meal.complexityText,
+                        ),
+                        SizedBox(width: 10),
+                        MealItemTrait(
+                          icon: Icons.attach_money,
+                          label: meal.affordabilityText,
+                        ),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Row(
