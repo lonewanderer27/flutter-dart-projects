@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meals_coffee_lounge/models/meal.dart';
 import 'package:meals_coffee_lounge/widgets/ingredient_item.dart';
-import 'package:meals_coffee_lounge/widgets/meal_item/meal_item_trait.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MealScreen extends StatelessWidget {
