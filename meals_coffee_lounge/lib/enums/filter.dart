@@ -1,0 +1,1 @@
+enum Filter { glutenFree, lactoseFree, vegetarianFree, vegan }

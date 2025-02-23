@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meals_coffee_lounge/providers/filters_provider.dart';
 import 'package:meals_coffee_lounge/screens/tabs_screen.dart';
 import 'package:meals_coffee_lounge/widgets/main_drawer.dart';
+import 'package:meals_coffee_lounge/enums/filter.dart';
 
-class FiltersScreen extends StatefulWidget {
+class FiltersScreen extends ConsumerStatefulWidget {
   const FiltersScreen({super.key});
 
   @override
-  State<FiltersScreen> createState() => _FiltersScreenState();
+  ConsumerState<FiltersScreen> createState() => _FiltersScreenState();
 }
 
-class _FiltersScreenState extends State<FiltersScreen> {
+class _FiltersScreenState extends ConsumerState<FiltersScreen> {
   bool _glutenFreeSet = false;
   bool _lactoseFreeSet = false;
   bool _vegetarianSet = false;
@@ -33,6 +36,16 @@ class _FiltersScreenState extends State<FiltersScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    final activeFilters = ref.read(filtersProvider);
+    _glutenFreeSet = activeFilters[Filter.glutenFree]!;
+    _lactoseFreeSet = activeFilters[Filter.lactoseFree]!;
+    _vegetarianSet = activeFilters[Filter.vegetarianFree]!;
+    _veganSet = activeFilters[Filter.vegan]!;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -47,6 +60,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
               setState(() {
                 _lactoseFreeSet = val;
               });
+
+              // set the global lactose free filter
+              ref
+                  .read(filtersProvider.notifier)
+                  .setFilter(Filter.lactoseFree, val);
             },
             title: Text('Lactose-free',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -63,6 +81,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
               setState(() {
                 _glutenFreeSet = val;
               });
+
+              // set the global gluten free filter
+              ref
+                  .read(filtersProvider.notifier)
+                  .setFilter(Filter.glutenFree, val);
             },
             title: Text(
               'Gluten-free',
@@ -83,6 +106,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
               setState(() {
                 _vegetarianSet = val;
               });
+
+              // set the global vegetarian filter
+              ref
+                  .read(filtersProvider.notifier)
+                  .setFilter(Filter.vegetarianFree, val);
             },
             title: Text('Vegetarian',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -99,6 +127,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
               setState(() {
                 _veganSet = val;
               });
+
+              // set the global vegan filter
+              ref.read(filtersProvider.notifier).setFilter(Filter.vegan, val);
             },
             title: Text('Vegan',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
