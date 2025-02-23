@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meals_coffee_lounge/models/meal.dart';
+import 'package:meals_coffee_lounge/widgets/ingredient_item.dart';
 import 'package:meals_coffee_lounge/widgets/meal_item/meal_item_trait.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -75,23 +76,25 @@ class MealScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 20),
                     ),
-                    ...(meal.ingredients.map((ingredient) => Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 3, horizontal: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                ingredient.title,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                ingredient.amount,
-                                style: TextStyle(color: Colors.white),
-                              )
-                            ],
-                          ),
-                        ))),
+                    // ...(meal.ingredients.map((ingredient) => Padding(
+                    //       padding: const EdgeInsets.symmetric(
+                    //           vertical: 3, horizontal: 5),
+                    //       child: Row(
+                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //         children: [
+                    //           Text(
+                    //             ingredient.title,
+                    //             style: TextStyle(color: Colors.white),
+                    //           ),
+                    //           Text(
+                    //             ingredient.amount,
+                    //             style: TextStyle(color: Colors.white),
+                    //           )
+                    //         ],
+                    //       ),
+                    //     ))),
+                    ...(meal.ingredients
+                        .map((ingredient) => IngredientItem(ingredient))),
                     SizedBox(height: 30),
                     Text('Steps',
                         style: TextStyle(

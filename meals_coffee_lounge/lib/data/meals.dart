@@ -1,3 +1,4 @@
+import 'package:meals_coffee_lounge/constants/assets.dart';
 import 'package:meals_coffee_lounge/models/ingredient.dart';
 import 'package:meals_coffee_lounge/models/meal.dart';
 
@@ -15,12 +16,15 @@ const availableMeals = [
         'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg/800px-Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg',
     duration: 20,
     ingredients: [
-      Ingredient(amount: '4', title: 'Tomatoes'),
-      Ingredient(amount: '1 Tablespoon', title: 'Olive Oil'),
-      Ingredient(amount: '1', title: 'Onion'),
-      Ingredient(amount: '250g', title: 'Spaghetti'),
-      Ingredient(amount: 'to taste', title: 'Spices'),
-      Ingredient(amount: 'optional', title: 'Cheese'),
+      Ingredient(amount: '4', title: 'Tomatoes', icon: Assets.tomato),
+      Ingredient(
+          amount: '1 Tablespoon',
+          title: 'Olive Oil',
+          icon: Assets.vegetableOil),
+      Ingredient(amount: '1', title: 'Onion', icon: Assets.onion),
+      Ingredient(amount: '250g', title: 'Spaghetti', icon: Assets.spaghetti),
+      Ingredient(amount: 'to taste', title: 'Spices', icon: Assets.spice),
+      Ingredient(amount: 'optional', title: 'Cheese', icon: Assets.cheese),
     ],
     steps: [
       'Cut the tomatoes and the onion into small pieces.',
@@ -48,11 +52,12 @@ const availableMeals = [
         'https://cdn.pixabay.com/photo/2018/07/11/21/51/toast-3532016_1280.jpg',
     duration: 10,
     ingredients: [
-      Ingredient(amount: '1 Slice', title: 'White Bread'),
-      Ingredient(amount: '1 Slice', title: 'Ham'),
-      Ingredient(amount: '1 Slice', title: 'Pineapple'),
-      Ingredient(amount: '1-2 Slices', title: 'Cheese'),
-      Ingredient(amount: 'as needed', title: 'Butter'),
+      Ingredient(
+          amount: '1 Slice', title: 'White Bread', icon: Assets.whiteBread),
+      Ingredient(amount: '1 Slice', title: 'Ham', icon: Assets.ham),
+      Ingredient(amount: '1 Slice', title: 'Pineapple', icon: Assets.pineapple),
+      Ingredient(amount: '1-2 Slices', title: 'Cheese', icon: Assets.cheese),
+      Ingredient(amount: 'as needed', title: 'Butter', icon: Assets.butter),
     ],
     steps: [
       'Butter one side of the white bread',
@@ -77,12 +82,12 @@ const availableMeals = [
         'https://cdn.pixabay.com/photo/2014/10/23/18/05/burger-500054_1280.jpg',
     duration: 45,
     ingredients: [
-      Ingredient(amount: '300g', title: 'Cattle Hack'),
-      Ingredient(amount: '1', title: 'Tomato'),
-      Ingredient(amount: '1', title: 'Cucumber'),
-      Ingredient(amount: '1', title: 'Onion'),
-      Ingredient(amount: 'to taste', title: 'Ketchup'),
-      Ingredient(amount: '2', title: 'Burger Buns'),
+      Ingredient(amount: '300g', title: 'Cattle Hack', icon: Assets.beef),
+      Ingredient(amount: '1', title: 'Tomato', icon: Assets.tomato),
+      Ingredient(amount: '1', title: 'Cucumber', icon: Assets.cucumber),
+      Ingredient(amount: '1', title: 'Onion', icon: Assets.onion),
+      Ingredient(amount: 'to taste', title: 'Ketchup', icon: Assets.ketchup),
+      Ingredient(amount: '2', title: 'Burger Buns', icon: Assets.burgerBun),
     ],
     steps: [
       'Form 2 patties',
@@ -108,14 +113,17 @@ const availableMeals = [
         'https://cdn.pixabay.com/photo/2018/03/31/19/29/schnitzel-3279045_1280.jpg',
     duration: 60,
     ingredients: [
-      Ingredient(amount: '8', title: 'Veal Cutlets'),
-      Ingredient(amount: '4', title: 'Eggs'),
-      Ingredient(amount: '200g', title: 'Bread Crumbs'),
-      Ingredient(amount: '100g', title: 'Flour'),
-      Ingredient(amount: '300ml', title: 'Butter'),
-      Ingredient(amount: '100g', title: 'Vegetable Oil'),
-      Ingredient(amount: 'to taste', title: 'Salt'),
-      Ingredient(amount: 'as needed', title: 'Lemon Slices')
+      Ingredient(amount: '8', title: 'Veal Cutlets', icon: Assets.beef),
+      Ingredient(amount: '4', title: 'Eggs', icon: Assets.egg),
+      Ingredient(
+          amount: '200g', title: 'Bread Crumbs', icon: Assets.breadCrumbs),
+      Ingredient(amount: '100g', title: 'Flour', icon: Assets.flour1),
+      Ingredient(amount: '300ml', title: 'Butter', icon: Assets.butter),
+      Ingredient(
+          amount: '100g', title: 'Vegetable Oil', icon: Assets.vegetableOil),
+      Ingredient(amount: 'to taste', title: 'Salt', icon: Assets.spice),
+      Ingredient(
+          amount: 'as needed', title: 'Lemon Slices', icon: Assets.lemonSlice)
     ],
     steps: [
       'Tenderize the veal to about 2-4mm, and salt on both sides.',
@@ -145,15 +153,22 @@ const availableMeals = [
         'https://cdn.pixabay.com/photo/2016/10/25/13/29/smoked-salmon-salad-1768890_1280.jpg',
     duration: 15,
     ingredients: [
-      Ingredient(amount: 'handful', title: 'Arugula'),
-      Ingredient(amount: 'handful', title: 'Lamb\'s Lettuce'),
-      Ingredient(amount: 'handful', title: 'Parsley'),
-      Ingredient(amount: '1 bulb', title: 'Fennel'),
-      Ingredient(amount: '200g', title: 'Smoked Salmon'),
-      Ingredient(amount: '1 tsp', title: 'Mustard'),
-      Ingredient(amount: '2 tbsp', title: 'Balsamic Vinegar'),
-      Ingredient(amount: '2 tbsp', title: 'Olive Oil'),
-      Ingredient(amount: 'to taste', title: 'Salt and Pepper'),
+      Ingredient(amount: 'handful', title: 'Arugula', icon: Assets.arugula),
+      Ingredient(
+          amount: 'handful', title: 'Lamb\'s Lettuce', icon: Assets.cornSalad),
+      Ingredient(amount: 'handful', title: 'Parsley', icon: Assets.parsley),
+      Ingredient(amount: '1 bulb', title: 'Fennel', icon: Assets.fennel),
+      Ingredient(
+          amount: '200g', title: 'Smoked Salmon', icon: Assets.smokedSalmon),
+      Ingredient(amount: '1 tsp', title: 'Mustard', icon: Assets.mustard),
+      Ingredient(
+          amount: '2 tbsp',
+          title: 'Balsamic Vinegar',
+          icon: Assets.balsamicVinegar),
+      Ingredient(
+          amount: '2 tbsp', title: 'Olive Oil', icon: Assets.vegetableOil),
+      Ingredient(
+          amount: 'to taste', title: 'Salt and Pepper', icon: Assets.spice),
     ],
     steps: [
       'Wash and cut salad and herbs',
@@ -180,12 +195,14 @@ const availableMeals = [
         'https://cdn.pixabay.com/photo/2017/05/01/05/18/pastry-2274750_1280.jpg',
     duration: 240,
     ingredients: [
-      Ingredient(amount: '4 Sheets', title: 'Gelatine'),
-      Ingredient(amount: '150ml', title: 'Orange Juice'),
-      Ingredient(amount: '80g', title: 'Sugar'),
-      Ingredient(amount: '300g', title: 'Yoghurt'),
-      Ingredient(amount: '200g', title: 'Cream'),
-      Ingredient(amount: 'for garnish', title: 'Orange Peel'),
+      Ingredient(amount: '4 Sheets', title: 'Gelatine', icon: Assets.jelly),
+      Ingredient(
+          amount: '150ml', title: 'Orange Juice', icon: Assets.orangeJuice),
+      Ingredient(amount: '80g', title: 'Sugar', icon: Assets.sugar),
+      Ingredient(amount: '300g', title: 'Yoghurt', icon: Assets.yoghurt),
+      Ingredient(amount: '200g', title: 'Cream', icon: Assets.whipCream),
+      Ingredient(
+          amount: 'for garnish', title: 'Orange Peel', icon: Assets.orange),
     ],
     steps: [
       'Dissolve gelatine in pot',
@@ -215,13 +232,23 @@ const availableMeals = [
         'https://cdn.pixabay.com/photo/2018/07/10/21/23/pancake-3529653_1280.jpg',
     duration: 20,
     ingredients: [
-      Ingredient(amount: '1 1/2 Cups', title: 'all-purpose Flour'),
-      Ingredient(amount: '3 1/2 Teaspoons', title: 'Baking Powder'),
-      Ingredient(amount: '1 Teaspoon', title: 'Salt'),
-      Ingredient(amount: '1 Tablespoon', title: 'White Sugar'),
-      Ingredient(amount: '1 1/4 cups', title: 'Milk'),
-      Ingredient(amount: '1', title: 'Egg'),
-      Ingredient(amount: '3 Tablespoons', title: 'Butter, melted'),
+      Ingredient(
+          amount: '1 1/2 Cups',
+          title: 'all-purpose Flour',
+          icon: Assets.flour2),
+      Ingredient(
+          amount: '3 1/2 Teaspoons',
+          title: 'Baking Powder',
+          icon: Assets.flour1),
+      Ingredient(amount: '1 Teaspoon', title: 'Salt', icon: Assets.spice),
+      Ingredient(
+          amount: '1 Tablespoon', title: 'White Sugar', icon: Assets.sugar),
+      Ingredient(amount: '1 1/4 cups', title: 'Milk', icon: Assets.milk),
+      Ingredient(amount: '1', title: 'Egg', icon: Assets.egg),
+      Ingredient(
+          amount: '3 Tablespoons',
+          title: 'Butter, melted',
+          icon: Assets.butter),
     ],
     steps: [
       'In a large bowl, sift together the flour, baking powder, salt and sugar.',
@@ -246,13 +273,17 @@ const availableMeals = [
         'https://cdn.pixabay.com/photo/2018/06/18/16/05/indian-food-3482749_1280.jpg',
     duration: 35,
     ingredients: [
-      Ingredient(amount: '4', title: 'Chicken Breasts'),
-      Ingredient(amount: '1', title: 'Onion'),
-      Ingredient(amount: '2 Cloves', title: 'Garlic'),
-      Ingredient(amount: '1 Piece', title: 'Ginger'),
-      Ingredient(amount: '4 Tablespoons', title: 'Almonds'),
-      Ingredient(amount: '1 Teaspoon', title: 'Cayenne Pepper'),
-      Ingredient(amount: '500ml', title: 'Coconut Milk'),
+      Ingredient(
+          amount: '4', title: 'Chicken Breasts', icon: Assets.chickenBreast),
+      Ingredient(amount: '1', title: 'Onion', icon: Assets.onion),
+      Ingredient(amount: '2 Cloves', title: 'Garlic', icon: Assets.garlic),
+      Ingredient(amount: '1 Piece', title: 'Ginger', icon: Assets.ginger),
+      Ingredient(
+          amount: '4 Tablespoons', title: 'Almonds', icon: Assets.almond),
+      Ingredient(
+          amount: '1 Teaspoon', title: 'Cayenne Pepper', icon: Assets.spice),
+      Ingredient(
+          amount: '500ml', title: 'Coconut Milk', icon: Assets.coconutMilk),
     ],
     steps: [
       'Slice and fry the chicken breast',
@@ -279,18 +310,30 @@ const availableMeals = [
         'https://cdn.pixabay.com/photo/2014/08/07/21/07/souffle-412785_1280.jpg',
     duration: 45,
     ingredients: [
-      Ingredient(amount: '1 Teaspoon', title: 'melted Butter'),
-      Ingredient(amount: '2 Tablespoons', title: 'white Sugar'),
-      Ingredient(amount: '2 Ounces', title: '70% dark Chocolate, broken into pieces'),
-      Ingredient(amount: '1 Tablespoon', title: 'Butter'),
-      Ingredient(amount: '1 Tablespoon', title: 'all-purpose Flour'),
-      Ingredient(amount: '4 1/3 tablespoons', title: 'cold Milk'),
-      Ingredient(amount: '1 Pinch', title: 'Salt'),
-      Ingredient(amount: '1 Pinch', title: 'Cayenne Pepper'),
-      Ingredient(amount: '1 Large', title: 'Egg Yolk'),
-      Ingredient(amount: '2 Large', title: 'Egg Whites'),
-      Ingredient(amount: '1 Pinch', title: 'Cream of Tartar'),
-      Ingredient(amount: '1 Tablespoon', title: 'white Sugar'),
+      Ingredient(
+          amount: '1 Teaspoon', title: 'melted Butter', icon: Assets.butter),
+      Ingredient(
+          amount: '2 Tablespoons', title: 'white Sugar', icon: Assets.sugar),
+      Ingredient(
+          amount: '2 Ounces',
+          title: '70% dark Chocolate',
+          icon: Assets.darkChocolate),
+      Ingredient(amount: '1 Tablespoon', title: 'Butter', icon: Assets.butter),
+      Ingredient(
+          amount: '1 Tablespoon',
+          title: 'all-purpose Flour',
+          icon: Assets.flour1),
+      Ingredient(
+          amount: '4 1/3 tablespoons', title: 'cold Milk', icon: Assets.milk),
+      Ingredient(amount: '1 Pinch', title: 'Salt', icon: Assets.spice),
+      Ingredient(
+          amount: '1 Pinch', title: 'Cayenne Pepper', icon: Assets.spice),
+      Ingredient(amount: '1 Large', title: 'Egg Yolk', icon: Assets.egg),
+      Ingredient(amount: '2 Large', title: 'Egg Whites', icon: Assets.egg),
+      Ingredient(
+          amount: '1 Pinch', title: 'Cream of Tartar', icon: Assets.spice),
+      Ingredient(
+          amount: '1 Tablespoon', title: 'white Sugar', icon: Assets.sugar),
     ],
     steps: [
       'Preheat oven to 190°C. Line a rimmed baking sheet with parchment paper.',
@@ -330,11 +373,17 @@ const availableMeals = [
         'https://cdn.pixabay.com/photo/2018/04/09/18/26/asparagus-3304997_1280.jpg',
     duration: 30,
     ingredients: [
-      Ingredient(amount: '1 bunch each', title: 'White and Green Asparagus'),
-      Ingredient(amount: '30g', title: 'Pine Nuts'),
-      Ingredient(amount: '300g', title: 'Cherry Tomatoes'),
-      Ingredient(amount: 'handful', title: 'Salad'),
-      Ingredient(amount: 'to taste', title: 'Salt, Pepper and Olive Oil'),
+      Ingredient(
+          amount: '1 bunch each',
+          title: 'White and Green Asparagus',
+          icon: Assets.asparagus),
+      Ingredient(amount: '30g', title: 'Pine Nuts', icon: Assets.pineNut),
+      Ingredient(amount: '300g', title: 'Cherry Tomatoes', icon: Assets.tomato),
+      Ingredient(amount: 'handful', title: 'Salad', icon: Assets.salad),
+      Ingredient(
+          amount: 'to taste',
+          title: 'Salt, Pepper and Olive Oil',
+          icon: Assets.spice),
     ],
     steps: [
       'Wash, peel and cut the asparagus',

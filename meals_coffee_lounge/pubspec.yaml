@@ -2,7 +2,7 @@ name: meals_coffee_lounge
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -54,16 +54,62 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+      - "assets/ingredients/almond-7488698.png"
+      - "assets/ingredients/arugula-7488192.png"
+      - "assets/ingredients/asparagus-2008548.png"
+      - "assets/ingredients/balsamic-vinegar-6784394.png"
+      - "assets/ingredients/beef-5768045.png"
+      - "assets/ingredients/bottle-4190499.png"
+      - "assets/ingredients/bread-crumbs-6992089.png"
+      - "assets/ingredients/burger-bun-5402760.png"
+      - "assets/ingredients/butter-7479840.png"
+      - "assets/ingredients/cayenne-pepper-6431445.png"
+      - "assets/ingredients/cheese-7216244.png"
+      - "assets/ingredients/cherry-tomato-7419054.png"
+      - "assets/ingredients/chicken-breast-6900507.png"
+      - "assets/ingredients/coconut-milk-6646558.png"
+      - "assets/ingredients/corn-salad-1018395.png"
+      - "assets/ingredients/cucumber-7488150.png"
+      - "assets/ingredients/dark-chocolate-6952016.png"
+      - "assets/ingredients/egg-7567062.png"
+      - "assets/ingredients/egg-white-7428322.png"
+      - "assets/ingredients/egg-yolk-6474301.png"
+      - "assets/ingredients/fennel-7488178.png"
+      - "assets/ingredients/flour-1015530.png"
+      - "assets/ingredients/flour-4593722.png"
+      - "assets/ingredients/garlic-gourmet-3009918.png"
+      - "assets/ingredients/ginger-7252442.png"
+      - "assets/ingredients/ham-7508357.png"
+      - "assets/ingredients/jelly-4371817.png"
+      - "assets/ingredients/ketchup-7415745.png"
+      - "assets/ingredients/lemon-slice-6869040.png"
+      - "assets/ingredients/milk-7413719.png"
+      - "assets/ingredients/mustard-7415693.png"
+      - "assets/ingredients/onion-7530795.png"
+      - "assets/ingredients/orange-juice-7531746.png"
+      - "assets/ingredients/orange-4393248.png"
+      - "assets/ingredients/parsley-6916157.png"
+      - "assets/ingredients/pepper-7530699.png"
+      - "assets/ingredients/pineapple-7564790.png"
+      - "assets/ingredients/pine-nut-6446221.png"
+      - "assets/ingredients/salad-7509554.png"
+      - "assets/ingredients/smoked-salmon-5218873.png"
+      - "assets/ingredients/spaghetti-7471789.png"
+      - "assets/ingredients/spice-7335321.png"
+      - "assets/ingredients/sugar-6990235.png"
+      - "assets/ingredients/tartar-sauce-5216779.png"
+      - "assets/ingredients/tomato-7585003.png"
+      - "assets/ingredients/vegetable-oil-6972292.png"
+      - "assets/ingredients/whip-cream-7470753.png"
+      - "assets/ingredients/white-bread-7406121.png"
+      - "assets/ingredients/yoghurt-7487845.png"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
