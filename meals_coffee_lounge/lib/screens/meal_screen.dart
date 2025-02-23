@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_coffee_lounge/models/meal.dart';
-import 'package:meals_coffee_lounge/providers/favorite_meals_provider.dart';
+import 'package:meals_coffee_lounge/providers/favorites_provider.dart';
 import 'package:meals_coffee_lounge/widgets/ingredient_item.dart';
 import 'package:transparent_image/transparent_image.dart';
 
