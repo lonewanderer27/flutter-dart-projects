@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meals_coffee_lounge/data/meals.dart';
 import 'package:meals_coffee_lounge/screens/categories_screen.dart';
 import 'package:meals_coffee_lounge/screens/meals_screen.dart';
+import 'package:meals_coffee_lounge/widgets/main_drawer.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -18,6 +19,17 @@ class _TabsScreenState extends State<TabsScreen> {
       _selectedPage = index;
     });
   }
+  void _setScreen(String identifier) {
+    switch (identifier) {
+      case 'filters':
+        {}
+        break;
+      case 'meals':
+        {
+          Navigator.of(context).pop();
+        }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +45,7 @@ class _TabsScreenState extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(activePageTitle),
       ),
+      drawer: MainDrawer(onSelectScreen: _setScreen),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedPage,
