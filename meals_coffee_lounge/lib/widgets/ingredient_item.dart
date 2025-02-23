@@ -13,6 +13,11 @@ class IngredientItem extends StatelessWidget {
           child: Image.asset(ingredient.icon!, color: Colors.white),
         ),
         title: Text(ingredient.title),
-        trailing: Text(ingredient.amount));
+        trailing: Text(
+          ingredient.amount,
+          style: TextStyle(
+            fontSize: 14
+          ),
+        ));
   }
 }

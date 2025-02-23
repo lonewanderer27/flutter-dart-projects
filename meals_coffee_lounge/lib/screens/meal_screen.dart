@@ -10,114 +10,76 @@ class MealScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(meal.title),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              FadeInImage(
-                  placeholder: MemoryImage(kTransparentImage),
-                  image: NetworkImage(meal.imageUrl)),
-              Padding(
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(title: Text(meal.title)),
+        body: Column(
+          children: [
+            // Meal image with a fixed height
+            SizedBox(
+              height: 225,
+              width: double.infinity,
+              child: FadeInImage(
+                placeholder: MemoryImage(kTransparentImage),
+                image: NetworkImage(meal.imageUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
+            Expanded(
+              child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        MealItemTrait(
-                          icon: Icons.schedule,
-                          label: '${meal.duration.toString()} min',
-                        ),
-                        SizedBox(width: 10),
-                        MealItemTrait(
-                          icon: Icons.work_outline,
-                          label: meal.complexityText,
-                        ),
-                        SizedBox(width: 10),
-                        MealItemTrait(
-                          icon: Icons.attach_money,
-                          label: meal.affordabilityText,
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
+                    const TabBar(
+                        tabs: [Tab(text: 'Ingredients'), Tab(text: 'Steps')]),
+                    // TabBarView inside Expanded
+                    Expanded(
+                      child: TabBarView(
                         children: [
-                          if (meal.isGlutenFree)
-                            Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Chip(label: Text('Gluten Free')),
-                            ),
-                          if (meal.isLactoseFree)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Chip(label: Text('Lactose Free')),
-                            ),
-                          if (meal.isVegan)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Chip(label: Text('Vegan')),
-                            ),
-                          if (meal.isVegetarian)
-                            Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Chip(label: Text('Vegetarian'))),
+                          ListView(
+                            padding: const EdgeInsets.all(8.0),
+                            children: meal.ingredients.map((ingredient) {
+                              return IngredientItem(ingredient);
+                            }).toList(),
+                          ),
+                          ListView(
+                            padding: const EdgeInsets.all(8.0),
+                            children: meal.steps.map((step) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 3, horizontal: 5),
+                                child: Text(step,
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                              );
+                            }).toList(),
+                          ),
                         ],
                       ),
                     ),
-                    Text(
-                      'Ingredients',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                    const SizedBox(height: 10),
+                    // Meal tags (gluten-free, vegan, etc.)
+                    Wrap(
+                      spacing: 10,
+                      children: [
+                        if (meal.isGlutenFree)
+                          const Chip(label: Text('Gluten Free')),
+                        if (meal.isLactoseFree)
+                          const Chip(label: Text('Lactose Free')),
+                        if (meal.isVegan) const Chip(label: Text('Vegan')),
+                        if (meal.isVegetarian)
+                          const Chip(label: Text('Vegetarian')),
+                      ],
                     ),
-                    // ...(meal.ingredients.map((ingredient) => Padding(
-                    //       padding: const EdgeInsets.symmetric(
-                    //           vertical: 3, horizontal: 5),
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           Text(
-                    //             ingredient.title,
-                    //             style: TextStyle(color: Colors.white),
-                    //           ),
-                    //           Text(
-                    //             ingredient.amount,
-                    //             style: TextStyle(color: Colors.white),
-                    //           )
-                    //         ],
-                    //       ),
-                    //     ))),
-                    ...(meal.ingredients
-                        .map((ingredient) => IngredientItem(ingredient))),
-                    SizedBox(height: 30),
-                    Text('Steps',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20)),
-                    ...(meal.steps.map((step) => Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 3, horizontal: 5),
-                          child: Column(
-                            children: [
-                              Text(
-                                step,
-                                style: TextStyle(color: Colors.white),
-                              )
-                            ],
-                          ),
-                        )))
                   ],
                 ),
-              )
-            ],
-          ),
-        ));
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
