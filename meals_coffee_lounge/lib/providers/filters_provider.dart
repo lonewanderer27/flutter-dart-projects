@@ -6,7 +6,7 @@ import 'package:meals_coffee_lounge/enums/filter.dart';
 class FiltersNotifier extends StateNotifier<Map<Filter, bool>> {
   // this looks confusing at first
   // but using super instantiates the default value of this notifier
-  // in this case an empty map
+  // in this case, we set to the initial default filters
   // which will be populated with the filters in the future
   FiltersNotifier() : super(kInitialFilters);
 
