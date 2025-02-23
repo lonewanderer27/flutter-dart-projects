@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meals_coffee_lounge/data/meals.dart';
 import 'package:meals_coffee_lounge/screens/categories_screen.dart';
+import 'package:meals_coffee_lounge/screens/filters_screen.dart';
 import 'package:meals_coffee_lounge/screens/meals_screen.dart';
 import 'package:meals_coffee_lounge/widgets/main_drawer.dart';
 
@@ -20,13 +21,18 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
   void _setScreen(String identifier) {
+    Navigator.of(context).pop();
+
     switch (identifier) {
       case 'filters':
-        {}
+        {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (ctx) => const FiltersScreen()));
+        }
         break;
       case 'meals':
         {
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
         }
     }
   }
