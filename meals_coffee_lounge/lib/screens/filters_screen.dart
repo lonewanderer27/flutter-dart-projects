@@ -5,63 +5,38 @@ import 'package:meals_coffee_lounge/screens/tabs_screen.dart';
 import 'package:meals_coffee_lounge/widgets/main_drawer.dart';
 import 'package:meals_coffee_lounge/enums/filter.dart';
 
-class FiltersScreen extends ConsumerStatefulWidget {
+class FiltersScreen extends ConsumerWidget {
   const FiltersScreen({super.key});
 
   @override
-  ConsumerState<FiltersScreen> createState() => _FiltersScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activeFilters = ref.watch(filtersProvider);
 
-class _FiltersScreenState extends ConsumerState<FiltersScreen> {
-  bool _glutenFreeSet = false;
-  bool _lactoseFreeSet = false;
-  bool _vegetarianSet = false;
-  bool _veganSet = false;
-
-  void _setScreen(String identifier) {
-    Navigator.of(context).pop();
-
-    switch (identifier) {
-      case 'filters':
-        {
-          // Navigator.of(context).pop();
-        }
-        break;
-      case 'meals':
-        {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (ctx) => const TabsScreen()));
-        }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    final activeFilters = ref.read(filtersProvider);
-    _glutenFreeSet = activeFilters[Filter.glutenFree]!;
-    _lactoseFreeSet = activeFilters[Filter.lactoseFree]!;
-    _vegetarianSet = activeFilters[Filter.vegetarianFree]!;
-    _veganSet = activeFilters[Filter.vegan]!;
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your filters'),
       ),
-      drawer: MainDrawer(onSelectScreen: _setScreen),
+      drawer: MainDrawer(onSelectScreen: (String identifier) {
+        Navigator.of(context).pop();
+
+        switch (identifier) {
+          case 'filters':
+            {
+              // Navigator.of(context).pop();
+            }
+            break;
+          case 'meals':
+            {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (ctx) => const TabsScreen()));
+            }
+        }
+      }),
       body: Column(
         children: [
           SwitchListTile(
-            value: _lactoseFreeSet,
+            value: activeFilters[Filter.lactoseFree]!,
             onChanged: (val) {
-              setState(() {
-                _lactoseFreeSet = val;
-              });
-
-              // set the global lactose free filter
               ref
                   .read(filtersProvider.notifier)
                   .setFilter(Filter.lactoseFree, val);
@@ -76,12 +51,8 @@ class _FiltersScreenState extends ConsumerState<FiltersScreen> {
             contentPadding: const EdgeInsets.only(left: 34, right: 22),
           ),
           SwitchListTile(
-            value: _glutenFreeSet,
+            value: activeFilters[Filter.glutenFree]!,
             onChanged: (val) {
-              setState(() {
-                _glutenFreeSet = val;
-              });
-
               // set the global gluten free filter
               ref
                   .read(filtersProvider.notifier)
@@ -101,12 +72,8 @@ class _FiltersScreenState extends ConsumerState<FiltersScreen> {
             contentPadding: const EdgeInsets.only(left: 34, right: 22),
           ),
           SwitchListTile(
-            value: _vegetarianSet,
+            value: activeFilters[Filter.vegetarianFree]!,
             onChanged: (val) {
-              setState(() {
-                _vegetarianSet = val;
-              });
-
               // set the global vegetarian filter
               ref
                   .read(filtersProvider.notifier)
@@ -122,12 +89,8 @@ class _FiltersScreenState extends ConsumerState<FiltersScreen> {
             contentPadding: const EdgeInsets.only(left: 34, right: 22),
           ),
           SwitchListTile(
-            value: _veganSet,
+            value: activeFilters[Filter.vegan]!,
             onChanged: (val) {
-              setState(() {
-                _veganSet = val;
-              });
-
               // set the global vegan filter
               ref.read(filtersProvider.notifier).setFilter(Filter.vegan, val);
             },
