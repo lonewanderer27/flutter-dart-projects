@@ -28,7 +28,7 @@ class MealScreen extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(bottom: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -39,13 +39,13 @@ class MealScreen extends StatelessWidget {
                       child: TabBarView(
                         children: [
                           ListView(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(20),
                             children: meal.ingredients.map((ingredient) {
                               return IngredientItem(ingredient);
                             }).toList(),
                           ),
                           ListView(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(20),
                             children: meal.steps.map((step) {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
