@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_coffee_lounge/data/meals.dart';
+import 'package:meals_coffee_lounge/providers/favorite_meals_provider.dart';
 import 'package:meals_coffee_lounge/screens/categories_screen.dart';
 import 'package:meals_coffee_lounge/screens/filters_screen.dart';
 import 'package:meals_coffee_lounge/screens/meals_screen.dart';
 import 'package:meals_coffee_lounge/widgets/main_drawer.dart';
 
-class TabsScreen extends StatefulWidget {
+class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
 
   @override
-  State<TabsScreen> createState() => _TabsScreenState();
+  ConsumerState<TabsScreen> createState() => _TabsScreenState();
 }
 
-class _TabsScreenState extends State<TabsScreen> {
+class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedPage = 0;
 
   void _selectPage(int index) {
@@ -43,7 +45,14 @@ class _TabsScreenState extends State<TabsScreen> {
     String activePageTitle = 'Categories';
 
     if (_selectedPage == 1) {
-      activePage = MealsScreen(meals: availableMeals);
+      final favoriteMealsId = ref.watch(favoriteMealsProvider);
+      
+      // get the meal objects
+      final favoriteMeals = availableMeals
+          .where((meal) => favoriteMealsId.contains(meal.id))
+          .toList();
+
+      activePage = MealsScreen(meals: favoriteMeals);
       activePageTitle = 'Your Favorites';
     }
 

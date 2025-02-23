@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:meals_coffee_lounge/data/categories.dart';
-import 'package:meals_coffee_lounge/data/meals.dart';
 import 'package:meals_coffee_lounge/models/category.dart';
+import 'package:meals_coffee_lounge/models/meal.dart';
 import 'package:meals_coffee_lounge/screens/meals_screen.dart';
 import 'package:meals_coffee_lounge/widgets/category_grid_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({super.key});
+  const CategoriesScreen({super.key, required this.availableMeals});
+  final List<Meal> availableMeals;
 
   void _selectCategory(BuildContext context, Category category) {
     Navigator.push(context, MaterialPageRoute(builder: (builder) {

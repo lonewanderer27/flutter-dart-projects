@@ -1,18 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_coffee_lounge/models/meal.dart';
+import 'package:meals_coffee_lounge/providers/favorite_meals_provider.dart';
 import 'package:meals_coffee_lounge/widgets/ingredient_item.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class MealScreen extends StatelessWidget {
+// if we come from StatelessWidget
+// therefore to use riverpod, we need to extend from ConsumerWidget instead
+class MealScreen extends ConsumerWidget {
   const MealScreen({super.key, required this.meal});
   final Meal meal;
 
   @override
-  Widget build(BuildContext context) {
+  // ConsumerWidget automatically pass a WidgetRef
+  // to the build method of this ConsumerWidget class
+  Widget build(BuildContext context, WidgetRef ref) {
+    // we used watch for now as using toggling meal favorite status
+    // doesn't seem to affect the isFavorite bool value 
+    // unless we reload the component / out then in
+    final isFavorite = ref.watch(favoriteMealsProvider).contains(meal.id);
+
+    void showInfoMessage(String message) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message)));
+    }
+
+    void markAsFavorite() {
+      bool added = ref
+          .read(favoriteMealsProvider.notifier)
+          .toggleMealFavoriteStatus(meal.id);
+
+      if (added) {
+        showInfoMessage('Marked as favorite');
+        return;
+      }
+
+      showInfoMessage('Meal is no longer a favorite');
+    }
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(title: Text(meal.title)),
+        appBar: AppBar(
+          title: Text(meal.title),
+          actions: [
+            IconButton(
+                onPressed: markAsFavorite,
+                icon: Icon(isFavorite ? Icons.star : Icons.star_outline))
+          ],
+        ),
         body: Column(
           children: [
             // Meal image with a fixed height
