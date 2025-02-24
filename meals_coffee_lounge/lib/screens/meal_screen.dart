@@ -75,7 +75,12 @@ class MealScreen extends ConsumerWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(meal.title),
+          title: Hero(
+            tag: meal.title,
+            child: Text(meal.title,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground)),
+          ),
           actions: [
             IconButton(
                 onPressed: markAsFavorite,
@@ -99,10 +104,13 @@ class MealScreen extends ConsumerWidget {
             SizedBox(
               height: 225,
               width: double.infinity,
-              child: FadeInImage(
-                placeholder: MemoryImage(kTransparentImage),
-                image: NetworkImage(meal.imageUrl),
-                fit: BoxFit.cover,
+              child: Hero(
+                tag: meal.id,
+                child: FadeInImage(
+                  placeholder: MemoryImage(kTransparentImage),
+                  image: NetworkImage(meal.imageUrl),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Expanded(

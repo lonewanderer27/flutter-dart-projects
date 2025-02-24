@@ -26,12 +26,15 @@ class MealItem extends StatelessWidget {
         },
         child: Stack(
           children: [
-            FadeInImage(
-                fit: BoxFit.cover,
-                height: 200,
-                width: double.infinity,
-                placeholder: MemoryImage(kTransparentImage),
-                image: NetworkImage(meal.imageUrl)),
+            Hero(
+              tag: meal.id,
+              child: FadeInImage(
+                  fit: BoxFit.cover,
+                  height: 200,
+                  width: double.infinity,
+                  placeholder: MemoryImage(kTransparentImage),
+                  image: NetworkImage(meal.imageUrl)),
+            ),
             Positioned(
                 bottom: 0,
                 right: 0,
@@ -42,16 +45,28 @@ class MealItem extends StatelessWidget {
                   child: Column(
                     children: [
                       // Title
-                      Text(
-                        meal.title,
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                      Hero(
+                        tag: meal.title,
+                        child: Text(
+                          meal.title,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          // style: TextStyle(
+                          //     fontSize: 20,
+                          //     fontWeight: FontWeight.bold,
+                          //     color: Colors.white),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
+                        ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
