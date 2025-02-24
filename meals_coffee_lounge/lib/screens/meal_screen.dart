@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_coffee_lounge/models/meal.dart';
+import 'package:meals_coffee_lounge/providers/categories_provider.dart';
 import 'package:meals_coffee_lounge/providers/favorites_provider.dart';
+import 'package:meals_coffee_lounge/screens/meals_screen.dart';
 import 'package:meals_coffee_lounge/widgets/ingredient_item.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -36,6 +38,37 @@ class MealScreen extends ConsumerWidget {
       }
 
       showInfoMessage('Meal is no longer a favorite');
+    }
+
+    void seeTaggedMeals(
+        {bool glutenFree = false,
+        bool lactoseFree = false,
+        bool vegetarian = false,
+        bool vegan = false}) {
+      debugPrint('asked for gluten free meals? $glutenFree');
+      debugPrint('asked for lactose free meals? $lactoseFree');
+      debugPrint('asked for vegetarian meals? $vegetarian');
+      debugPrint('asked for vegan meals? $vegan');
+
+      Navigator.push(context, MaterialPageRoute(builder: (builder) {
+        return MealsScreen(
+            meals: ref
+                .read(glutenFree
+                    ? glutenFreeMealsProvider
+                    : lactoseFree
+                        ? lactoseFreeMealsProvider
+                        : vegetarian
+                            ? vegetarianMealsProvider
+                            : veganMealsProvider)
+                .toList(),
+            title: glutenFree
+                ? 'Gluten-free Meals'
+                : lactoseFree
+                    ? 'Lactose-free Meals'
+                    : vegetarian
+                        ? 'Vegetarian Meals'
+                        : 'Vegan Meals');
+      }));
     }
 
     return DefaultTabController(
@@ -111,12 +144,33 @@ class MealScreen extends ConsumerWidget {
                       spacing: 10,
                       children: [
                         if (meal.isGlutenFree)
-                          const Chip(label: Text('Gluten Free')),
+                          InkWell(
+                            child: Chip(label: Text('Gluten Free')),
+                            onTap: () {
+                              seeTaggedMeals(glutenFree: true);
+                            },
+                          ),
                         if (meal.isLactoseFree)
-                          const Chip(label: Text('Lactose Free')),
-                        if (meal.isVegan) const Chip(label: Text('Vegan')),
+                          InkWell(
+                            child: Chip(label: Text('Lactose Free')),
+                            onTap: () {
+                              seeTaggedMeals(lactoseFree: true);
+                            },
+                          ),
+                        if (meal.isVegan)
+                          InkWell(
+                            child: Chip(label: Text('Vegan')),
+                            onTap: () {
+                              seeTaggedMeals(vegan: true);
+                            },
+                          ),
                         if (meal.isVegetarian)
-                          const Chip(label: Text('Vegetarian')),
+                          InkWell(
+                            child: Chip(label: Text('Vegetarian')),
+                            onTap: () {
+                              seeTaggedMeals(vegetarian: true);
+                            },
+                          ),
                       ],
                     ),
                   ],
