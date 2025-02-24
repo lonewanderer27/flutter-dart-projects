@@ -16,7 +16,7 @@ class MealScreen extends ConsumerWidget {
   // to the build method of this ConsumerWidget class
   Widget build(BuildContext context, WidgetRef ref) {
     // we used watch for now as using toggling meal favorite status
-    // doesn't seem to affect the isFavorite bool value 
+    // doesn't seem to affect the isFavorite bool value
     // unless we reload the component / out then in
     final isFavorite = ref.watch(favoriteMealsProvider).contains(meal.id);
 
@@ -46,7 +46,18 @@ class MealScreen extends ConsumerWidget {
           actions: [
             IconButton(
                 onPressed: markAsFavorite,
-                icon: Icon(isFavorite ? Icons.star : Icons.star_outline))
+                icon: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 500),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return RotationTransition(
+                          turns: Tween(begin: 0.8, end: 1.0).animate(animation),
+                          child: child);
+                    },
+                    child: Icon(
+                      isFavorite ? Icons.star : Icons.star_outline,
+                      key: ValueKey(isFavorite),
+                    )))
           ],
         ),
         body: Column(
