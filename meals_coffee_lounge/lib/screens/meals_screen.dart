@@ -11,8 +11,13 @@ class MealsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget content = Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Uh oh... Nothing is here'),
+          Text('Uh oh... Nothing is here',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface)),
           SizedBox(
             height: 10,
           ),
