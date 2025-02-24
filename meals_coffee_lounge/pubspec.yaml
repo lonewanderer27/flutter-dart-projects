@@ -67,6 +67,7 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
+  # Be careful of the indentation, 2 Tabs usually works.
   assets:
       - "assets/ingredients/almond-7488698.png"
       - "assets/ingredients/arugula-7488192.png"
