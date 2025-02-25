@@ -24,10 +24,31 @@ class _GroceryListState extends ConsumerState<GroceryListScreen> {
     final groceryItems = ref.watch(groceryItemsProvider);
     Widget content = GroceryList(groceryItems);
 
-    if (groceryItems.data.isEmpty && groceryItems.isLoading == false) {
+    if (groceryItems.data.isEmpty &&
+        groceryItems.isLoading == false &&
+        groceryItems.error == null) {
       content = Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text('No grocery items found. Start adding some!')],
+        children: [
+          Text(
+            'No grocery items found. Start adding some!',
+            style: TextStyle(fontSize: 17),
+          )
+        ],
+      );
+    }
+
+    if (groceryItems.data.isEmpty &&
+        groceryItems.isLoading == false &&
+        groceryItems.error != null) {
+      content = Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            groceryItems.error!,
+            style: TextStyle(color: Colors.red, fontSize: 17),
+          )
+        ],
       );
     }
 
@@ -47,7 +68,7 @@ class _GroceryListState extends ConsumerState<GroceryListScreen> {
           // However for performance related reasons, we should use itemBuilder instead.
           child: content),
       floatingActionButton: FloatingActionButton(
-        onPressed: addGrocery,
+        onPressed: groceryItems.error != null ? null : addGrocery,
         tooltip: 'Add Grocery',
         child: const Icon(Icons.add),
       ),
