@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_groceries/models/grocery_item.dart';
-import 'package:my_groceries/providers/grocery_items_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class GroceryListItem extends ConsumerWidget {
-  const GroceryListItem({super.key, required this.item});
+class GroceryListItem extends StatelessWidget {
+  const GroceryListItem(
+      {super.key, required this.item, required this.handleDelete});
   final GroceryItem item;
+  final void Function(String id) handleDelete;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Dismissible(
       key: Key(item.id),
       background: Container(
@@ -37,7 +37,8 @@ class GroceryListItem extends ConsumerWidget {
         ),
       ),
       onDismissed: (direction) {
-        ref.read(groceryItemsProvider.notifier).deleteItem(item.id);
+        // ref.read(groceryItemsProvider.notifier).deleteItem(item.id, context);
+        handleDelete(item.id);
       },
       child: ListTile(
         leading: Skeleton.replace(

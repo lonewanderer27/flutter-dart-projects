@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_groceries/data/categories.dart';
@@ -76,6 +78,8 @@ class GroceryItemsNotifier extends StateNotifier<GroceryItemsState> {
       // TODO: Get the real firebase error then set that as the error message,
       // instead we just assign a generic error message;
 
+      inspect(error);
+
       state = state.copyWith(
           error: 'Failed to fetch data. Please try again later.');
     }
@@ -125,6 +129,8 @@ class GroceryItemsNotifier extends StateNotifier<GroceryItemsState> {
             error: 'Failed to fetch data. Please try again later.');
       }
     } catch (error) {
+      inspect(error);
+
       // TODO: Get the real firebase error then set that as the error message,
       // instead we just assign a generic error message;
 
@@ -135,22 +141,63 @@ class GroceryItemsNotifier extends StateNotifier<GroceryItemsState> {
     state = state.copyWith(isLoading: false);
   }
 
-  Future<void> deleteItem(String id) async {
-    state = state.copyWith(isLoading: true);
+  Future<void> deleteItem(String id, BuildContext ctx) async {
+    // deleting an item should be instantaneous
+    // therefore, we should keep the grocery item temporarily
+    // do the http delete request, if that fails
+    // lets warn the user that it was unsuccessful then
+    // we can move the item back.
 
-    final res = await http
-        .delete(Uri.https(dotenv.env['BACKEND_URL']!, 'shopping-list.json'));
+    // save the item to be deleted
+    var deletedItem = state.data.firstWhere((item) => item.id == id);
 
-    if (res.statusCode == 200) {
-      // create a new state without the now delete grocery item
-      // since the state is immutable
-      state = state.copyWith(
-          data: state.data.where((item) => item.id != id).toList());
-    } else {
-      // TODO: Get the real firebase error then set that as the error message,
-      // instead we just assign a generic error message;
+    // create a new state without the now delete grocery item
+    // since the state is immutable
+    state = state.copyWith(
+        data: state.data.where((item) => item.id != id).toList());
+
+    // send delete request to backend
+    try {
+      final res = await http
+          .delete(Uri.https(dotenv.env['BACKEND_URL']!, 'shopping-list.json'));
+
+      if (res.statusCode == 200) {
+        // notice the user that we're succesful
+        // give them the option to restore the item
+
+        // ignore: use_build_context_synchronously
+        // ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+        //   duration: const Duration(seconds: 3),
+        //   content: const Text('Grocery item deleted'),
+        //   action: SnackBarAction(label: 'Undo', onPressed: () {
+        //     //
+        //   }),
+        // ));
+
+        // I realized giving them an option to restore that deleted
+        // item opens a whole can of worms. So we will not do anything for now.
+      } else {
+        // we're not successful, so we move back the grocery item to state
+        state = state.copyWith(data: [...state.data, deletedItem]);
+
+        // warn the user that the deletion has been unsuccessful
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 3),
+            content: const Text('There has been error. Please try again.')));
+      }
+    } catch (error) {
+      inspect(error);
+
+      // we're not successful, so we move back the grocery item to state
+      state = state.copyWith(data: [...state.data, deletedItem]);
+
+      // warn the user that the deletion has been unsuccessful
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+          duration: const Duration(seconds: 3),
+          content: const Text('There has been error. Please try again.')));
     }
-
     state = state.copyWith(isLoading: false);
   }
 }
