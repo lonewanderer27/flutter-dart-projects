@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_groceries/providers/grocery_items_provider.dart';
 import 'package:my_groceries/screens/new_item_screen.dart';
-import 'package:my_groceries/widgets/grocery_list_item.dart';
+import 'package:my_groceries/widgets/grocery_list.dart';
 
-class GroceryList extends ConsumerStatefulWidget {
-  const GroceryList({super.key, required this.title});
+class GroceryListScreen extends ConsumerStatefulWidget {
+  const GroceryListScreen({super.key, required this.title});
   final String title;
   @override
-  ConsumerState<GroceryList> createState() => _GroceryListState();
+  ConsumerState<GroceryListScreen> createState() => _GroceryListState();
 }
 
-class _GroceryListState extends ConsumerState<GroceryList> {
+class _GroceryListState extends ConsumerState<GroceryListScreen> {
   // In statefull widget, we can automatically access the context
   // so it does not matter even if we do it outside of the build method.
   void addGrocery() {
@@ -22,13 +22,9 @@ class _GroceryListState extends ConsumerState<GroceryList> {
   @override
   Widget build(BuildContext context) {
     final groceryItems = ref.watch(groceryItemsProvider);
+    Widget content = GroceryList(groceryItems);
 
-    Widget content = ListView.builder(
-        itemCount: groceryItems.length,
-        itemBuilder: (ctx, index) =>
-            GroceryListItem(item: groceryItems[index]));
-
-    if (groceryItems.isEmpty) {
+    if (groceryItems.data.isEmpty && groceryItems.isLoading == false) {
       content = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [Text('No grocery items found. Start adding some!')],

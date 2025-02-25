@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:math';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_groceries/data/categories.dart';
@@ -9,12 +6,29 @@ import 'package:my_groceries/models/category.dart';
 import 'package:http/http.dart' as http;
 import '../models/grocery_item.dart';
 
-class GroceryItemsNotifier extends StateNotifier<List<GroceryItem>> {
-  GroceryItemsNotifier() : super([]) {
+class GroceryItemsState {
+  final bool isLoading;
+  final List<GroceryItem> data;
+
+  GroceryItemsState({required this.isLoading, required this.data});
+
+  GroceryItemsState copyWith({bool? isLoading, List<GroceryItem>? data}) {
+    return GroceryItemsState(
+      isLoading: isLoading ?? this.isLoading,
+      data: data ?? this.data,
+    );
+  }
+}
+
+class GroceryItemsNotifier extends StateNotifier<GroceryItemsState> {
+  GroceryItemsNotifier()
+      : super(GroceryItemsState(isLoading: true, data: [])) {
     _fetchItems();
   }
 
   Future<void> _fetchItems() async {
+    state = state.copyWith(isLoading: true);
+
     final res = await http.get(
         Uri.parse('https://${dotenv.env['BACKEND_URL']}/shopping-list.json'));
 
@@ -46,14 +60,19 @@ class GroceryItemsNotifier extends StateNotifier<List<GroceryItem>> {
       });
 
       // replace our state with the new grocery items
-      state = groceryItems;
+      state = state.copyWith(data: groceryItems);
     } else {
       // TODO: Handle data errors here.
     }
+
+    // set loading to false
+    state = state.copyWith(isLoading: false);
   }
 
   Future<void> addItem(
       String id, String name, int quantity, Category category) async {
+    state = state.copyWith(isLoading: true);
+
     // appending .json at the end tells JSON that we'll be sending an HTTP request ourselves to Firebase
     final res = await http.post(
         Uri.https(dotenv.env['BACKEND_URL']!, 'shopping-list.json'),
@@ -70,19 +89,21 @@ class GroceryItemsNotifier extends StateNotifier<List<GroceryItem>> {
       final data = jsonDecode(res.body) as Map<String, String>;
 
       // create a new grocery item with the ID of the newly generated item
-      // so that the data is consistent between local (state) and the server (firebase) 
+      // so that the data is consistent between local (state) and the server (firebase)
       var newItem = GroceryItem(
           id: data['name'], name: name, quantity: quantity, category: category);
 
       // append the new grocery item
-      state = [...state, newItem];
+      state = state.copyWith(data: [...state.data, newItem]);
     } else {
       // TODO: Handle error when adding an item
     }
+
+    state = state.copyWith(isLoading: false);
   }
 }
 
 final groceryItemsProvider =
-    StateNotifierProvider<GroceryItemsNotifier, List<GroceryItem>>((ref) {
+    StateNotifierProvider<GroceryItemsNotifier, GroceryItemsState>((ref) {
   return GroceryItemsNotifier();
 });

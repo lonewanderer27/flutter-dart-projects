@@ -18,7 +18,7 @@ class MyGroceriesApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const GroceryList(title: 'My Groceries'),
+      home: const GroceryListScreen(title: 'My Groceries'),
     );
   }
 }
