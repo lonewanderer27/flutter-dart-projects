@@ -86,7 +86,7 @@ class GroceryItemsNotifier extends StateNotifier<GroceryItemsState> {
       // decode the response body as a map
       // sending an http post request to firebase realtime db yields us with a response body
       // that contains a 'name' key that contains the ID of the newly created item
-      final data = jsonDecode(res.body) as Map<String, String>;
+      final data = jsonDecode(res.body) as Map<String, dynamic>;
 
       // create a new grocery item with the ID of the newly generated item
       // so that the data is consistent between local (state) and the server (firebase)
