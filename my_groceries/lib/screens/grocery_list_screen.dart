@@ -23,6 +23,18 @@ class _GroceryListState extends ConsumerState<GroceryList> {
   Widget build(BuildContext context) {
     final groceryItems = ref.watch(groceryItemsProvider);
 
+    Widget content = ListView.builder(
+        itemCount: groceryItems.length,
+        itemBuilder: (ctx, index) =>
+            GroceryListItem(item: groceryItems[index]));
+
+    if (groceryItems.isEmpty) {
+      content = Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Text('No grocery items found. Start adding some!')],
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -37,10 +49,7 @@ class _GroceryListState extends ConsumerState<GroceryList> {
           // )
           // It's generally fine to output the items insdie of children directly
           // However for performance related reasons, we should use itemBuilder instead.
-          child: ListView.builder(
-              itemCount: groceryItems.length,
-              itemBuilder: (ctx, index) =>
-                  GroceryListItem(item: groceryItems[index]))),
+          child: content),
       floatingActionButton: FloatingActionButton(
         onPressed: addGrocery,
         tooltip: 'Add Grocery',
