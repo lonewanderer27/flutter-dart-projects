@@ -52,22 +52,33 @@ class GroceryItemsNotifier extends StateNotifier<List<GroceryItem>> {
     }
   }
 
-  void addItem(String id, String name, int quantity, Category category) {
-    var newItem =
-        GroceryItem(id: id, name: name, quantity: quantity, category: category);
-
-    state = [...state, newItem];
-
+  Future<void> addItem(
+      String id, String name, int quantity, Category category) async {
     // appending .json at the end tells JSON that we'll be sending an HTTP request ourselves to Firebase
-    http.post(Uri.https(dotenv.env['BACKEND_URL']!, 'shopping-list.json'),
+    final res = await http.post(
+        Uri.https(dotenv.env['BACKEND_URL']!, 'shopping-list.json'),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({
-          'name': newItem.name,
-          'quantity': newItem.quantity,
-          'category': newItem.category.title
-        }));
+        body: jsonEncode(
+            {'name': name, 'quantity': quantity, 'category': category.title}));
+
+    if (res.statusCode == 200) {
+      // decode the response body as a map
+      // sending an http post request to firebase realtime db yields us with a response body
+      // that contains a 'name' key that contains the ID of the newly created item
+      final data = jsonDecode(res.body) as Map<String, String>;
+
+      // create a new grocery item with the ID of the newly generated item
+      // so that the data is consistent between local (state) and the server (firebase) 
+      var newItem = GroceryItem(
+          id: data['name'], name: name, quantity: quantity, category: category);
+
+      // append the new grocery item
+      state = [...state, newItem];
+    } else {
+      // TODO: Handle error when adding an item
+    }
   }
 }
 
