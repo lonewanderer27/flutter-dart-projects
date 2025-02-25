@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:my_groceries/data/dummy_items.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:my_groceries/providers/grocery_items_provider.dart';
+import 'package:my_groceries/screens/new_item_screen.dart';
 import 'package:my_groceries/widgets/grocery_list_item.dart';
 
-class GroceryList extends StatefulWidget {
+class GroceryList extends ConsumerStatefulWidget {
   const GroceryList({super.key, required this.title});
   final String title;
   @override
-  State<GroceryList> createState() => _GroceryListState();
+  ConsumerState<GroceryList> createState() => _GroceryListState();
 }
 
-class _GroceryListState extends State<GroceryList> {
+class _GroceryListState extends ConsumerState<GroceryList> {
+  // In statefull widget, we can automatically access the context
+  // so it does not matter even if we do it outside of the build method.
+  void addGrocery() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (ctx) => NewItemScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
+    final groceryItems = ref.watch(groceryItemsProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -31,7 +42,7 @@ class _GroceryListState extends State<GroceryList> {
               itemBuilder: (ctx, index) =>
                   GroceryListItem(item: groceryItems[index]))),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: addGrocery,
         tooltip: 'Add Grocery',
         child: const Icon(Icons.add),
       ),
