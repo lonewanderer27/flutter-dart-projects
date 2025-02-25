@@ -39,6 +39,12 @@ class GroceryItemsNotifier extends StateNotifier<GroceryItemsState> {
           Uri.parse('https://${dotenv.env['BACKEND_URL']}/shopping-list.json'));
 
       if (res.statusCode == 200) {
+        if (res.body == 'null') {
+          state = state.copyWith(isLoading: false);
+
+          return;
+        }
+
         // decode the response body as a map which has a dynamic type for the value
         final data = jsonDecode(res.body) as Map<String, dynamic>;
 
