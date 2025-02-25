@@ -19,9 +19,14 @@ class GroceryItemsNotifier extends StateNotifier<List<GroceryItem>> {
         Uri.parse('https://${dotenv.env['BACKEND_URL']}/shopping-list.json'));
 
     if (res.statusCode == 200) {
+      // decode the response body as a map which has a dynamic type for the value
       final data = jsonDecode(res.body) as Map<String, dynamic>;
-      final List<GroceryItem> rawItems = [];
 
+      // temporary list that we'll place our grocery items to
+      // before using this to replace our actual state
+      final List<GroceryItem> groceryItems = [];
+
+      // loop for each item inside the raw response body
       data.forEach((id, itemRawData) {
         // find the actual category object based on its title
         Category category = categories.entries
@@ -29,16 +34,19 @@ class GroceryItemsNotifier extends StateNotifier<List<GroceryItem>> {
                 (category) => category.value.title == itemRawData['category'])
             .value;
 
-        rawItems.add(GroceryItem(
+        // create a new grocery item for each raw item
+        var groceryItem = GroceryItem(
             id: id,
             name: itemRawData['name'],
             quantity: itemRawData['quantity'],
-            category: category));
+            category: category);
+
+        // add the grocery item to the raw list
+        groceryItems.add(groceryItem);
       });
 
-      state = rawItems;
-
-      inspect(state);
+      // replace our state with the new grocery items
+      state = groceryItems;
     } else {
       // TODO: Handle data errors here.
     }
