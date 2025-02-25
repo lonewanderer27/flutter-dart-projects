@@ -68,7 +68,7 @@ class _GroceryListState extends ConsumerState<GroceryListScreen> {
           // However for performance related reasons, we should use itemBuilder instead.
           child: content),
       floatingActionButton: FloatingActionButton(
-        onPressed: groceryItems.error != null ? null : addGrocery,
+        onPressed: addGrocery,
         tooltip: 'Add Grocery',
         child: const Icon(Icons.add),
       ),
