@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_groceries/data/dummy_items.dart';
+import 'package:my_groceries/widgets/grocery_list_item.dart';
 
 void main() {
   runApp(const MyGroceriesApp());
@@ -27,14 +29,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,22 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        child: ListView(
+          children: groceryItems
+              .map((grocery) => GroceryListItem(item: grocery))
+              .toList(),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: () {},
+        tooltip: 'Add Grocery',
         child: const Icon(Icons.add),
       ),
     );
