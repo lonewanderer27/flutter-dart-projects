@@ -10,11 +10,24 @@ class AddPlacesScreen extends ConsumerStatefulWidget {
 }
 
 class _AddPlacesScreenState extends ConsumerState<AddPlacesScreen> {
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  late final FavoritePlacesNotifier favoritePlaces;
+
+  @override
+  void initState() {
+    super.initState();
+    favoritePlaces = ref.read(favoritePlacesProvider.notifier);
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-    final nameController = TextEditingController();
-    final favoritePlaces = ref.read(favoritePlacesProvider.notifier);
     void handleAdd() {
       if (formKey.currentState!.validate() == false) return;
 
