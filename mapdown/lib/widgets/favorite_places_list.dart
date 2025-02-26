@@ -19,6 +19,20 @@ class FavoritePlacesList extends ConsumerWidget {
           .push(MaterialPageRoute(builder: (ctx) => PlaceDetailScreen(place)));
     }
 
+    if (places.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Nothing has been added yet. Create one now!',
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            )
+          ],
+        ),
+      );
+    }
+
     return ListView.builder(
         itemCount: places.length,
         itemBuilder: (ctx, index) =>
