@@ -217,7 +217,7 @@ class GroceryItemsNotifier extends StateNotifier<GroceryItemsState> {
     state = state.copyWith(isLoading: false);
   }
 
-  Future<void> deleteItem(String id, BuildContext ctx) async {
+  Future<void> deleteItem(String id, BuildContext ctx, int index) async {
     // deleting an item should be instantaneous
     // therefore, we should keep the grocery item temporarily
     // do the http delete request, if that fails
@@ -254,7 +254,9 @@ class GroceryItemsNotifier extends StateNotifier<GroceryItemsState> {
         // item opens a whole can of worms. So we will not do anything for now.
       } else {
         // we're not successful, so we move back the grocery item to state
-        state = state.copyWith(data: [...state.data, deletedItem]);
+        var prevData = state.data;
+        prevData.insert(index, deletedItem);
+        state = state.copyWith(data: prevData);
 
         // warn the user that the deletion has been unsuccessful
         // ignore: use_build_context_synchronously
@@ -266,7 +268,9 @@ class GroceryItemsNotifier extends StateNotifier<GroceryItemsState> {
       inspect(error);
 
       // we're not successful, so we move back the grocery item to state
-      state = state.copyWith(data: [...state.data, deletedItem]);
+      var prevData = state.data;
+      prevData.insert(index, deletedItem);
+      state = state.copyWith(data: prevData);
 
       // warn the user that the deletion has been unsuccessful
       // ignore: use_build_context_synchronously

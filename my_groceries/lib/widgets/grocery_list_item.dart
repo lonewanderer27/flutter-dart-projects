@@ -11,7 +11,7 @@ class GroceryListItem extends StatelessWidget {
       required this.index});
   final GroceryItem item;
   final int index;
-  final void Function(String id) handleDelete;
+  final void Function(String id, int index) handleDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class GroceryListItem extends StatelessWidget {
       ),
       onDismissed: (direction) {
         // ref.read(groceryItemsProvider.notifier).deleteItem(item.id, context);
-        handleDelete(item.id);
+        handleDelete(item.id, index);
       },
       child: InkWell(
         onTap: handleTap,

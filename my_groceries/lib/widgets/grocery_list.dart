@@ -17,8 +17,8 @@ class GroceryList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    void handleDelete(String id) {
-      ref.read(groceryItemsProvider.notifier).deleteItem(id, context);
+    void handleDelete(String id, int index) {
+      ref.read(groceryItemsProvider.notifier).deleteItem(id, context, index);
     }
 
     if (groceryItemsState.isLoading) {
