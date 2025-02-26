@@ -13,17 +13,32 @@ class PlaceDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(place.name),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Image.file(place.image),
-            SizedBox(height: 20),
-            Text(
-              place.name,
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            )
-          ],
-        ),
+      body: Stack(
+        children: [
+          Image.file(
+            place.image,
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
+          ),
+          Expanded(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(height: 20),
+                    Text(
+                      'Metadata here...',
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
