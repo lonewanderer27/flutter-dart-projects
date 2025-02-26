@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:uuid/uuid.dart';
 
 final Uuid uuid = Uuid();
 
 class FavoritePlace {
-  String id;
-  String name;
+  final String id;
+  final String name;
+  final File image;
 
-  FavoritePlace({required this.name}) : id = uuid.v4();
+  FavoritePlace({required this.name, required this.image}) : id = uuid.v4();
 }

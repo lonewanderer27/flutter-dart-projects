@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mapdown/models/favorite_place.dart';
 
@@ -13,11 +15,12 @@ class PlaceDetailScreen extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.file(place.image),
+            SizedBox(height: 20),
             Text(
               place.name,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontSize: 20),
             )
           ],
         ),

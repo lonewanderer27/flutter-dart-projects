@@ -12,6 +12,11 @@ class FavoritePlacesListItem extends StatelessWidget {
       onTap: () {
         handleOnPlace(place.id);
       },
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        child: Image.file(place.image,
+            fit: BoxFit.cover, height: 40, width: 40),
+      ),
       title: Text(place.name),
     );
   }
