@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mapdown/models/favorite_place.dart';
-import 'package:mapdown/screens/place_screen.dart';
+import 'package:mapdown/screens/place_detail_screen.dart';
 import 'package:mapdown/widgets/favorite_places_list_item.dart';
 
 class FavoritePlacesList extends ConsumerWidget {
@@ -16,7 +16,7 @@ class FavoritePlacesList extends ConsumerWidget {
 
       // navigate to that screen
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (ctx) => PlaceScreen(place)));
+          .push(MaterialPageRoute(builder: (ctx) => PlaceDetailScreen(place)));
     }
 
     return ListView.builder(

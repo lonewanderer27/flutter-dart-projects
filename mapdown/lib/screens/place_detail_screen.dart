@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mapdown/models/favorite_place.dart';
 
-class PlaceScreen extends StatelessWidget {
-  const PlaceScreen(this.place, {super.key});
+class PlaceDetailScreen extends StatelessWidget {
+  const PlaceDetailScreen(this.place, {super.key});
   final FavoritePlace place;
 
   @override
