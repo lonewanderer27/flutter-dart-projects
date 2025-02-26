@@ -59,7 +59,12 @@ class GroceryListItem extends StatelessWidget {
           child: Text(item.name),
         ),
         trailing: Skeleton.replace(
-            height: 10, width: 10, child: Text(item.quantity.toString())),
+            height: 18,
+            width: 18,
+            child: Text(
+              item.quantity.toString(),
+              style: TextStyle(fontSize: 15),
+            )),
       ),
     );
   }
