@@ -29,6 +29,7 @@ class GroceryList extends ConsumerWidget {
             itemBuilder: (ctx, index) => GroceryListItem(
                   item: fakeGroceryItems[index],
                   handleDelete: handleDelete,
+                  index: index,
                 )),
       );
     }
@@ -36,6 +37,8 @@ class GroceryList extends ConsumerWidget {
     return ListView.builder(
         itemCount: groceryItemsState.data.length,
         itemBuilder: (ctx, index) => GroceryListItem(
-            item: groceryItemsState.data[index], handleDelete: handleDelete));
+            item: groceryItemsState.data[index],
+            handleDelete: handleDelete,
+            index: index));
   }
 }

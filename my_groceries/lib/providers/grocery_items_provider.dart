@@ -94,6 +94,76 @@ class GroceryItemsNotifier extends StateNotifier<GroceryItemsState> {
     state = state.copyWith(isLoading: false);
   }
 
+  // to change
+  Future<bool> replaceItem(String id, String name, int quantity,
+      Category category, int index) async {
+    // deleting an item should be instantaneous in the UI
+    // therefore, we should keep the grocery item temporarily
+    // do the http put request, if that fails
+    // lets warn the user that it was unsuccessful then
+    // we can revert the item back.
+
+    // save the previous version of our item
+    GroceryItem prevItem = state.data.firstWhere((item) => item.id == id);
+
+    // create the next version of our item
+    GroceryItem nextItem =
+        GroceryItem(id: id, name: name, quantity: quantity, category: category);
+
+    // set loading to true
+    // and since our state is immutable
+    // we create a new data list with the updated data
+    var prevData = state.data;
+    prevData[index] = nextItem;
+    state = state.copyWith(data: prevData, isLoading: true);
+
+    // do the http request
+    try {
+      final res = await http.put(
+          Uri.https(dotenv.env['BACKEND_URL']!, 'shopping-list/$id.json'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'name': name,
+            'quantity': quantity,
+            'category': category.title
+          }));
+
+      if (res.statusCode != 200) {
+        // our request have failed, therefore we need to put the item back
+        // set the error response to a generic message
+        // and set loading to false
+        state = state.copyWith(
+            data: [...state.data, prevItem],
+            isLoading: false,
+            error: "Failed to update item. Please try again later.");
+
+        // return a false since we had an error
+        return false;
+      }
+
+      // otherwise our operation has been successful
+      state = state.copyWith(
+        isLoading: false,
+      );
+
+      // then return true so we can dismiss the update screen
+      return true;
+    } catch (error) {
+      inspect(error);
+
+      // our request have failed, therefore we need to put the item back
+      // set the error response to a generic message
+      // and set loading to false
+      state = state.copyWith(
+          data: [...state.data, prevItem],
+          isLoading: false,
+          error: "Failed to update item. Please try again later.");
+
+      // return a false since we had an error
+      return false;
+    }
+  }
+
   Future<void> addItem(
       String id, String name, int quantity, Category category) async {
     state = state.copyWith(isLoading: true);
