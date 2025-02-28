@@ -7,7 +7,10 @@ class PlacesNotifier extends StateNotifier<List<Place>> {
   PlacesNotifier() : super([]);
 
   void add(String name, File image, DateTime dateTime) {
-    state = [...state, Place(title: name, image: image, dateTime: dateTime)];
+    state = [
+      Place(title: name, image: image, dateTime: dateTime),
+      ...state,
+    ];
   }
 }
 
