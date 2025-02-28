@@ -7,6 +7,7 @@ import 'package:moments/providers/camera_provider.dart';
 import 'package:moments/screens/new_place_screen.dart';
 import 'package:moments/widgets/camera_viewfinder.dart';
 import 'package:moments/widgets/place_item.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +19,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen>
     with TickerProviderStateMixin {
   late PageController _pageViewController;
-  int currentPage = 0;
   late TabController _tabController;
   int _currentPageIndex = 0;
 
@@ -47,6 +47,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       CameraViewFinder()
     ];
 
+    void handleCamPress() {
+      // if we're on the slides then set the current page to the last
+      if (_currentPageIndex < slides.length - 1) {
+        _pageViewController.animateToPage(slides.length - 1,
+            duration: Durations.long2, curve: Curves.decelerate);
+        return;
+      }
+
+      // otherwise trigger the camera
+      ref.read(cameraProvider.notifier).takePicture().then((image) {
+        if (image == null) return;
+        var pickedImage = File(image.path);
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (ctx) => NewPlaceScreen(pickedImage)));
+      });
+    }
+
     return Scaffold(
       backgroundColor: Colors.black54,
       body: Column(
@@ -56,6 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               controller: _pageViewController,
               onPageChanged: (page) {
                 setState(() {
+                  debugPrint('current page: $page');
                   _currentPageIndex = page;
                 });
               },
@@ -67,34 +85,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox.shrink(
-                    child: Row(
-                  children: [
-                    // TODO: Page indicator that disappears when we're on the final page
-                    SizedBox(
-                      width: 20,
-                    ),
-                  ],
-                )),
+                if (_currentPageIndex < slides.length - 1)
+                  Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
+                          child: SmoothPageIndicator(
+                              controller: _pageViewController,
+                              count: slides.length),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                    ],
+                  ),
                 ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(cameraProvider.notifier)
-                        .takePicture()
-                        .then((image) {
-                      if (image == null) return;
-                      var pickedImage = File(image.path);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => NewPlaceScreen(pickedImage)));
-                    });
-                  },
+                  onPressed: handleCamPress,
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
                     padding: EdgeInsets.all(10),
                   ),
                   child: Icon(
                     Icons.photo_camera,
-                    size: 30,
+                    size: 28,
                   ),
                 ),
                 if (_currentPageIndex == slides.length - 1)
