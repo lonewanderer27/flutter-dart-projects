@@ -26,41 +26,45 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
     return Form(
         key: _formKey,
         child: Scaffold(
-          body: Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Hero(
-                    tag: 'image-preview',
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      clipBehavior: Clip.hardEdge,
-                      child: Image.file(widget.image,
-                          height: 500,
-                          width: double.infinity,
-                          fit: BoxFit.fill),
-                    )),
-                SizedBox(height: 10),
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(label: Text('Place')),
-                  validator: (value) {
-                    if (value == null || value.isEmpty || value.length > 50) {
-                      return 'Please enter a valid place name';
-                    }
+          backgroundColor: Colors.black54,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding:
+                  EdgeInsets.only(top: 40, bottom: 20, right: 20, left: 20),
+              child: Column(
+                children: [
+                  Hero(
+                      tag: 'image-preview',
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.file(widget.image,
+                            height: 500,
+                            width: double.infinity,
+                            fit: BoxFit.fill),
+                      )),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(label: Text('Place')),
+                    validator: (value) {
+                      if (value == null || value.isEmpty || value.length > 50) {
+                        return 'Please enter a valid place name';
+                      }
 
-                    if (value.trim().length < 2 || value.length > 50) {
-                      return 'Must be between 2 to 50 characters.';
-                    }
+                      if (value.trim().length < 2 || value.length > 50) {
+                        return 'Must be between 2 to 50 characters.';
+                      }
 
-                    return null;
-                  },
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(onPressed: handleAdd, child: Text('Submit'))
-              ],
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(onPressed: handleAdd, child: Text('Submit'))
+                ],
+              ),
             ),
           ),
         ));
