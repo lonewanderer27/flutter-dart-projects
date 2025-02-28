@@ -21,6 +21,7 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
 
     void handleAdd() {
       placesNotifier.add(_nameController.text, widget.image, DateTime.now());
+      Navigator.of(context).pop();
     }
 
     return Form(
