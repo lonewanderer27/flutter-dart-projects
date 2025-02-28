@@ -18,6 +18,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen>
     with TickerProviderStateMixin {
   late PageController _pageViewController;
+  int currentPage = 0;
   late TabController _tabController;
   int _currentPageIndex = 0;
 
@@ -37,20 +38,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> slides = [
+      ...(dummyPlaces
+          .map((place) => PlaceItem(
+                dummyPlace: place,
+              ))
+          .toList()),
+      CameraViewFinder()
+    ];
+
     return Scaffold(
       backgroundColor: Colors.black54,
       body: Column(
         children: [
           Expanded(
             child: PageView(
-              children: [
-                ...(dummyPlaces
-                    .map((place) => PlaceItem(
-                          dummyPlace: place,
-                        ))
-                    .toList()),
-                CameraViewFinder()
-              ],
+              controller: _pageViewController,
+              onPageChanged: (page) {
+                setState(() {
+                  _currentPageIndex = page;
+                });
+              },
+              children: slides,
             ),
           ),
           Padding(
@@ -87,7 +96,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     Icons.photo_camera,
                     size: 30,
                   ),
-                )
+                ),
+                if (_currentPageIndex == slides.length - 1)
+                  IconButton.outlined(
+                      onPressed: () {
+                        ref
+                            .read(cameraProvider.notifier)
+                            .selectFromGallery()
+                            .then((image) {
+                          if (image == null) return;
+                          var pickedImage = File(image.path);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => NewPlaceScreen(pickedImage)));
+                        });
+                      },
+                      icon: Icon(Icons.image))
               ],
             ),
           )

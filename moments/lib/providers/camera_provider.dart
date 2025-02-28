@@ -1,40 +1,42 @@
-import 'dart:developer';
-
 import 'package:camera/camera.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
-class CameraState {
-  final CameraController? controller;
-  final bool hasInitialized;
+class CameraNotifier extends StateNotifier<CameraController?> {
+  CameraNotifier() : super(null);
 
-  CameraState({this.controller, this.hasInitialized = false});
+  // Future<void> initCamera() async {
+  //   await disposeCamera();
 
-  CameraState copyWith({CameraController? controller, bool? hasInitialized}) {
-    return CameraState(
-      controller: controller ?? this.controller,
-      hasInitialized: hasInitialized ?? this.hasInitialized,
-    );
+  //   final cameras = await availableCameras();
+  //   final camController =
+  //       CameraController(cameras.first, ResolutionPreset.high);
+
+  //   var initializeControllerFuture = camController.initialize();
+  //   state = state.copyWith(controller: camController, hasInitialized: true);
+  //   return initializeControllerFuture;
+  // }
+
+  void setController(CameraController controller) async {
+    state = controller;
   }
-}
 
-class CameraNotifier extends StateNotifier<CameraState> {
-  CameraNotifier() : super(CameraState());
+  Future<void> disposeCamera() async {
+    if (state != null) {
+      await state!.dispose();
+    }
+  }
 
-  Future<void> initCamera() async {
-    final cameras = await availableCameras();
-    final camController =
-        CameraController(cameras.first, ResolutionPreset.high);
-
-    var initializeControllerFuture = camController.initialize();
-    state = state.copyWith(controller: camController, hasInitialized: true);
-    return initializeControllerFuture;
+  Future<XFile?> selectFromGallery() async {
+    final imagePicker = ImagePicker();
+    return await imagePicker.pickMedia();
   }
 
   Future<XFile?> takePicture() async {
     XFile? image;
 
-    if (state.controller != null && state.hasInitialized) {
-      image = await state.controller!.takePicture();
+    if (state != null) {
+      image = await state!.takePicture();
     }
 
     return image;
@@ -43,6 +45,6 @@ class CameraNotifier extends StateNotifier<CameraState> {
 
 /// Riverpod Provider for the CameraNotifier
 final cameraProvider =
-    StateNotifierProvider<CameraNotifier, CameraState>((ref) {
+    StateNotifierProvider<CameraNotifier, CameraController?>((ref) {
   return CameraNotifier();
 });

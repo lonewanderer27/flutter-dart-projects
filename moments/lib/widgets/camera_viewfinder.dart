@@ -11,27 +11,49 @@ class CameraViewFinder extends ConsumerStatefulWidget {
 }
 
 class _CameraViewFinderState extends ConsumerState<CameraViewFinder> {
-  late Future<void> _initializeControllerFuture;
+  // Remove 'late' and initialize as null
+  CameraController? _cameraController;
+  Future<void>? _initializeControllerFuture;
+
+  Future<void> _initCamera() async {
+    try {
+      final cameras = await availableCameras();
+      final camController =
+          CameraController(cameras.first, ResolutionPreset.high);
+
+      // Store the controller
+      setState(() {
+        _cameraController = camController;
+      });
+
+      // Set in provider so we can access its methods from other widgets
+      ref.read(cameraProvider.notifier).setController(camController);
+
+      // Initialize and store the future
+      final future = camController.initialize();
+      setState(() {
+        _initializeControllerFuture = future;
+      });
+    } catch (e) {
+      debugPrint('Error initializing camera: $e');
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _initializeControllerFuture =
-        ref.read(cameraProvider.notifier).initCamera();
+    _initCamera();
   }
 
   @override
   void dispose() {
-    if (mounted) {
-      ref.read(cameraProvider).controller?.dispose();
-    }
+    // Only dispose if controller exists
+    _cameraController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var controller = ref.watch(cameraProvider).controller;
-
     return Padding(
         padding: EdgeInsets.only(top: 40, bottom: 20, left: 20, right: 20),
         child: Column(
@@ -48,19 +70,23 @@ class _CameraViewFinderState extends ConsumerState<CameraViewFinder> {
                 child: ClipRRect(
               clipBehavior: Clip.hardEdge,
               borderRadius: BorderRadius.circular(20),
-              child: FutureBuilder(
-                  future: _initializeControllerFuture,
-                  builder: (ctx, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      // If the Future is complete, display the preview.
-                      return Hero(
-                          tag: 'image-preview',
-                          child: CameraPreview(controller!));
-                    } else {
-                      // Otherwise, display a loading indicator.
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                  }),
+              child: _initializeControllerFuture != null &&
+                      _cameraController != null
+                  ? FutureBuilder(
+                      future: _initializeControllerFuture,
+                      builder: (ctx, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          // If the Future is complete, display the preview.
+                          return Hero(
+                              tag: 'image-preview',
+                              child: CameraPreview(_cameraController!));
+                        } else {
+                          // Otherwise, display a loading indicator.
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                      })
+                  : const Center(child: Text('Initializing camera...')),
             ))
           ],
         ));
