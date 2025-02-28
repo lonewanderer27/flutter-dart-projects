@@ -1,17 +1,16 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:moments/providers/camera_controller.dart';
+import 'package:moments/providers/camera_provider.dart';
 
-class ImageInput extends ConsumerStatefulWidget {
-  const ImageInput({super.key});
+class CameraViewFinder extends ConsumerStatefulWidget {
+  const CameraViewFinder({super.key});
 
   @override
-  ConsumerState<ImageInput> createState() => _ImageInputState();
+  ConsumerState<CameraViewFinder> createState() => _CameraViewFinderState();
 }
 
-class _ImageInputState extends ConsumerState<ImageInput> {
-  late CameraController _controller;
+class _CameraViewFinderState extends ConsumerState<CameraViewFinder> {
   late Future<void> _initializeControllerFuture;
 
   @override
@@ -23,7 +22,9 @@ class _ImageInputState extends ConsumerState<ImageInput> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (mounted) {
+      ref.read(cameraProvider).controller?.dispose();
+    }
     super.dispose();
   }
 
@@ -52,7 +53,9 @@ class _ImageInputState extends ConsumerState<ImageInput> {
                   builder: (ctx, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       // If the Future is complete, display the preview.
-                      return CameraPreview(controller!);
+                      return Hero(
+                          tag: 'image-preview',
+                          child: CameraPreview(controller!));
                     } else {
                       // Otherwise, display a loading indicator.
                       return const Center(child: CircularProgressIndicator());

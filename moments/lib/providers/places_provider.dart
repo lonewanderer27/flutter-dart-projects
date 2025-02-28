@@ -11,7 +11,7 @@ class PlacesNotifier extends StateNotifier<List<Place>> {
   }
 }
 
-final favoritePlacesProvider =
+final placesProvider =
     StateNotifierProvider<PlacesNotifier, List<Place>>((ref) {
   return PlacesNotifier();
 });

@@ -23,18 +23,21 @@ class CameraNotifier extends StateNotifier<CameraState> {
   Future<void> initCamera() async {
     final cameras = await availableCameras();
     final camController =
-        CameraController(cameras.first, ResolutionPreset.medium);
+        CameraController(cameras.first, ResolutionPreset.high);
 
-    var _initializeControllerFuture = camController.initialize();
+    var initializeControllerFuture = camController.initialize();
     state = state.copyWith(controller: camController, hasInitialized: true);
-    return _initializeControllerFuture;
+    return initializeControllerFuture;
   }
 
-  Future<void> takePicture() async {
+  Future<XFile?> takePicture() async {
+    XFile? image;
+
     if (state.controller != null && state.hasInitialized) {
-      final image = state.controller!.takePicture();
-      inspect(image);
+      image = await state.controller!.takePicture();
     }
+
+    return image;
   }
 }
 

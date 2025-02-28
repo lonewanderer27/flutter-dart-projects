@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:moments/data/dummy_places.dart';
-import 'package:moments/providers/camera_controller.dart';
-import 'package:moments/widgets/image_input.dart';
+import 'package:moments/providers/camera_provider.dart';
+import 'package:moments/screens/new_place_screen.dart';
+import 'package:moments/widgets/camera_viewfinder.dart';
 import 'package:moments/widgets/place_item.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -46,7 +49,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           dummyPlace: place,
                         ))
                     .toList()),
-                ImageInput()
+                CameraViewFinder()
               ],
             ),
           ),
@@ -66,7 +69,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 )),
                 ElevatedButton(
                   onPressed: () {
-                    ref.read(cameraProvider.notifier).takePicture();
+                    ref
+                        .read(cameraProvider.notifier)
+                        .takePicture()
+                        .then((image) {
+                      if (image == null) return;
+                      var pickedImage = File(image.path);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (ctx) => NewPlaceScreen(pickedImage)));
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
