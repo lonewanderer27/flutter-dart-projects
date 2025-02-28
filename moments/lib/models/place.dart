@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -50,5 +51,10 @@ class Place {
 
     await tempFile.writeAsBytes(byteData.buffer.asUint8List());
     return tempFile;
+  }
+
+  String get formattedDate {
+    String formattedDate = DateFormat('E, MMM d y').format(dateTime);
+    return formattedDate;
   }
 }

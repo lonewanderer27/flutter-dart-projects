@@ -56,8 +56,8 @@ class PlaceItem extends StatelessWidget {
                           fontWeight: FontWeight.bold)),
                   Text(
                     place != null
-                        ? place!.dateTime.toLocal().toString()
-                        : dummyPlace!.dateTime.toLocal().toString(),
+                        ? place!.formattedDate
+                        : dummyPlace!.formattedDate,
                     style: TextStyle(fontSize: 15, color: Colors.white60),
                   )
                 ],
