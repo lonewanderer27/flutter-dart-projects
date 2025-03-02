@@ -55,11 +55,14 @@ class PlaceItem extends StatelessWidget {
                           color: Colors.white,
                           fontWeight: FontWeight.bold)),
                   Text(
-                    place != null
-                        ? place!.formattedDate
-                        : dummyPlace!.formattedDate,
-                    style: TextStyle(fontSize: 15, color: Colors.white60),
-                  )
+                      place != null
+                          ? place!.formattedDate
+                          : dummyPlace!.formattedDate,
+                      style: TextStyle(fontSize: 15, color: Colors.white60)),
+                  Text(place != null ? place!.address.displayName : '',
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white60))
                 ],
               ),
             ),
