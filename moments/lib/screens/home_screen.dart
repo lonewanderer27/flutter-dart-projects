@@ -96,25 +96,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_currentPageIndex < slides.length - 1 && slides.isNotEmpty)
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 15),
-                          child: SmoothPageIndicator(
-                              controller: pageController, count: slides.length),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  ),
+                AnimatedScale(
+                  duration: Duration(milliseconds: 300),
+                  scale:
+                      _currentPageIndex < slides.length - 1 && slides.isNotEmpty
+                          ? 1.0
+                          : 0.0,
+                  child:
+                      _currentPageIndex < slides.length - 1 && slides.isNotEmpty
+                          ? Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(25)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 15),
+                                    child: SmoothPageIndicator(
+                                        controller: pageController,
+                                        count: slides.length),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                              ],
+                            )
+                          : SizedBox.shrink(),
+                ),
                 ElevatedButton(
                   onPressed: handleCamPress,
                   style: ElevatedButton.styleFrom(
@@ -126,9 +136,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     size: 28,
                   ),
                 ),
-                if (_currentPageIndex == slides.length - 1)
-                  IconButton.outlined(
-                      onPressed: handleGalleryPress, icon: Icon(Icons.image))
+                AnimatedScale(
+                  scale: _currentPageIndex == slides.length - 1 ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 300),
+                  child: _currentPageIndex == slides.length - 1
+                      ? IconButton.outlined(
+                          onPressed: handleGalleryPress,
+                          icon: Icon(Icons.image))
+                      : SizedBox.shrink(),
+                )
               ],
             ),
           )
