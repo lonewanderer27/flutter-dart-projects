@@ -5,18 +5,6 @@ import 'package:image_picker/image_picker.dart';
 class CameraNotifier extends StateNotifier<CameraController?> {
   CameraNotifier() : super(null);
 
-  // Future<void> initCamera() async {
-  //   await disposeCamera();
-
-  //   final cameras = await availableCameras();
-  //   final camController =
-  //       CameraController(cameras.first, ResolutionPreset.high);
-
-  //   var initializeControllerFuture = camController.initialize();
-  //   state = state.copyWith(controller: camController, hasInitialized: true);
-  //   return initializeControllerFuture;
-  // }
-
   void setController(CameraController controller) async {
     state = controller;
   }

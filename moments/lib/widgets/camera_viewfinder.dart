@@ -18,8 +18,9 @@ class _CameraViewFinderState extends ConsumerState<CameraViewFinder> {
   Future<void> _initCamera() async {
     try {
       final cameras = await availableCameras();
-      final camController =
-          CameraController(cameras.first, ResolutionPreset.high);
+      final camController = CameraController(
+          cameras.first, ResolutionPreset.high,
+          enableAudio: false);
 
       // Store the controller
       setState(() {
