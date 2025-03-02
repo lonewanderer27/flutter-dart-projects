@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:moments/providers/camera_provider.dart';
 
 class CameraViewFinder extends ConsumerStatefulWidget {
