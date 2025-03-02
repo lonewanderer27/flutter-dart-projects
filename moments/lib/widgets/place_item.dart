@@ -42,7 +42,7 @@ class PlaceItem extends StatelessWidget {
       child: GestureDetector(
         onTap: handleTap,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
