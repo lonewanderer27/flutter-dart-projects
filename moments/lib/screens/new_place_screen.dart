@@ -32,7 +32,10 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
     super.initState();
     // Fetch location data when the widget initializes
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loc = ref.watch(locationProvider);
       _locN = ref.read(locationProvider.notifier);
+
+      if (_loc.locationData != null) return;
       _locN.refresh();
     });
   }

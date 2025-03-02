@@ -1,36 +1,47 @@
-class NominatimAddress {
+import 'package:moments/models/place.dart';
+
+class Address {
+  String id;
   String road;
   String village;
   String stateDistrict;
   String state;
-  String postcode;
+  String postCode;
   String country;
   String countryCode;
   String displayName;
   String name;
+  double lat;
+  double lon;
 
-  NominatimAddress(
-      {required this.road,
+  Address(
+      {String? id,
+      required this.road,
       required this.village,
       required this.stateDistrict,
       required this.state,
-      required this.postcode,
+      required this.postCode,
       required this.country,
       required this.countryCode,
       required this.displayName,
-      required this.name});
+      required this.name,
+      required this.lat,
+      required this.lon})
+      : id = id ?? uuid.v4();
 
-  factory NominatimAddress.fromJSON(
-      Map<String, dynamic> json, String displayName, String name) {
-    return NominatimAddress(
+  factory Address.fromJSON(Map<String, dynamic> json, String displayName,
+      String name, double lat, double lon) {
+    return Address(
         road: json['road'] ??= '',
         village: json['village'] ??= '',
         stateDistrict: json['state_district'] ??= '',
         state: json['state'] ??= '',
-        postcode: json['postcode'] ??= '',
+        postCode: json['postcode'] ??= '',
         country: json['country'] ??= '',
         countryCode: json['country_code'] ??= '',
         displayName: displayName,
-        name: name);
+        name: name,
+        lat: lat,
+        lon: lon);
   }
 }

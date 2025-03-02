@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:moments/models/nominatim_address.dart';
+import 'package:moments/models/address.dart';
 import 'package:moments/models/place.dart';
 
 class DummyPlace {
@@ -7,7 +7,7 @@ class DummyPlace {
   final String title;
   final String imagePath;
   final DateTime dateTime;
-  final NominatimAddress? address;
+  final Address? address;
 
   DummyPlace(
       {required this.title,

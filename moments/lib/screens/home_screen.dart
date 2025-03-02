@@ -18,6 +18,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen>
     with TickerProviderStateMixin {
+  late Future<void> _placesFuture;
   late PageController pageController;
   late TabController _tabController;
   int _currentPageIndex = 0;
@@ -25,6 +26,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   @override
   void initState() {
     super.initState();
+    _placesFuture = ref.read(placesProvider.notifier).loadPlaces();
     pageController = PageController();
     _tabController = TabController(length: 4, vsync: this);
   }
@@ -80,15 +82,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       body: Column(
         children: [
           Expanded(
-            child: PageView(
-              controller: pageController,
-              onPageChanged: (page) {
-                setState(() {
-                  debugPrint('current page: $page');
-                  _currentPageIndex = page;
-                });
-              },
-              children: slides,
+            child: FutureBuilder(
+              future: _placesFuture,
+              builder: (ctx, snapshot) =>
+                  snapshot.connectionState == ConnectionState.waiting
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : PageView(
+                          controller: pageController,
+                          onPageChanged: (page) {
+                            setState(() {
+                              debugPrint('current page: $page');
+                              _currentPageIndex = page;
+                            });
+                          },
+                          children: slides,
+                        ),
             ),
           ),
           Padding(

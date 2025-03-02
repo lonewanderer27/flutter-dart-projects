@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:moments/models/nominatim_address.dart';
+import 'package:moments/models/address.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -12,21 +12,22 @@ class Place {
   final String title;
   final DateTime dateTime;
   final File image;
-  final NominatimAddress address;
+  final Address address;
 
   Place(
-      {required this.title,
+      {String? id,
+      required this.title,
       required this.image,
       required this.dateTime,
       required this.address})
-      : id = uuid.v4();
+      : id = id ?? uuid.v4();
 
   /// Factory constructor for assets
   static Future<Place> fromAsset(
       {required String name,
       required String assetPath,
       required DateTime dateTime,
-      required NominatimAddress address}) async {
+      required Address address}) async {
     final file = await _copyAssetToFile(assetPath);
     return Place(
         title: name, image: file, dateTime: dateTime, address: address);
@@ -37,7 +38,7 @@ class Place {
       {required String name,
       required String filePath,
       required DateTime dateTime,
-      required NominatimAddress address}) async {
+      required Address address}) async {
     final file = File(filePath);
     if (await file.exists()) {
       return Place(
@@ -52,7 +53,7 @@ class Place {
       {required String name,
       required File file,
       required DateTime dateTime,
-      required NominatimAddress address}) {
+      required Address address}) {
     return Place(
         title: name, image: file, dateTime: dateTime, address: address);
   }

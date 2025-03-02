@@ -4,7 +4,7 @@ import 'dart:core';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:location/location.dart';
-import 'package:moments/models/nominatim_address.dart';
+import 'package:moments/models/address.dart';
 import 'package:http/http.dart' as http;
 
 class LocationState {
@@ -14,7 +14,7 @@ class LocationState {
   final PermissionStatus? permissionStatus;
   final Location? location;
   final LocationData? locationData;
-  final NominatimAddress? address;
+  final Address? address;
 
   LocationState({
     this.error,
@@ -33,7 +33,7 @@ class LocationState {
       PermissionStatus? permissionStatus,
       Location? location,
       LocationData? locationData,
-      NominatimAddress? address}) {
+      Address? address}) {
     return LocationState(
         loading: loading ?? this.loading,
         serviceEnabled: serviceEnabled ?? this.serviceEnabled,
@@ -105,7 +105,7 @@ class LocationNotifier extends StateNotifier<LocationState> {
     }
   }
 
-  Future<NominatimAddress?> getAddress() async {
+  Future<Address?> getAddress() async {
     _startLoading();
 
     try {
@@ -137,8 +137,12 @@ class LocationNotifier extends StateNotifier<LocationState> {
       debugPrint('rawData: $rawData');
 
       // See: https://nominatim.org/release-docs/develop/api/Reverse/#example-with-formatjsonv2
-      NominatimAddress address = NominatimAddress.fromJSON(
-          rawData['address'], rawData['display_name'], rawData['name']);
+      Address address = Address.fromJSON(
+          rawData['address'],
+          rawData['display_name'],
+          rawData['name'],
+          state.locationData!.latitude!,
+          state.locationData!.longitude!);
 
       state = state.copyWith(address: address);
       _finishLoading();
