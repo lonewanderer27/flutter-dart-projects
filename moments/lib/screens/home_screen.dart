@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:moments/data/dummy_places.dart';
 import 'package:moments/providers/camera_provider.dart';
+import 'package:moments/providers/page_provider.dart';
+import 'package:moments/providers/places_provider.dart';
 import 'package:moments/screens/new_place_screen.dart';
 import 'package:moments/widgets/camera_viewfinder.dart';
 import 'package:moments/widgets/place_item.dart';
@@ -38,12 +40,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final favoritePlaces = ref.watch(placesProvider);
     List<Widget> slides = [
-      ...(dummyPlaces
-          .map((place) => PlaceItem(
-                dummyPlace: place,
-              ))
-          .toList()),
+      ...(favoritePlaces.map((place) => PlaceItem(place: place)).toList()),
+      // ...(dummyPlaces
+      //     .map((place) => PlaceItem(
+      //           dummyPlace: place,
+      //         ))
+      //     .toList()),
       CameraViewFinder()
     ];
 
@@ -85,7 +89,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_currentPageIndex < slides.length - 1)
+                if (_currentPageIndex < slides.length - 1 && slides.isNotEmpty)
                   Row(
                     children: [
                       Container(

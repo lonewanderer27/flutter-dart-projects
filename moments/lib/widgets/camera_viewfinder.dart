@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:moments/providers/camera_provider.dart';
 
 class CameraViewFinder extends ConsumerStatefulWidget {
@@ -57,37 +58,44 @@ class _CameraViewFinderState extends ConsumerState<CameraViewFinder> {
     return Padding(
         padding: EdgeInsets.only(top: 40, bottom: 20, left: 20, right: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // camera controllers here
+                  Text('New Memory',
+                      style: TextStyle(
+                          fontSize: 25,
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold)),
+                  Text('Today',
+                      style: TextStyle(fontSize: 15, color: Colors.white60))
                 ],
               ),
             ),
             Expanded(
                 child: ClipRRect(
-              clipBehavior: Clip.hardEdge,
-              borderRadius: BorderRadius.circular(20),
-              child: _initializeControllerFuture != null &&
-                      _cameraController != null
-                  ? FutureBuilder(
-                      future: _initializeControllerFuture,
-                      builder: (ctx, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          // If the Future is complete, display the preview.
-                          return Hero(
-                              tag: 'image-preview',
-                              child: CameraPreview(_cameraController!));
-                        } else {
-                          // Otherwise, display a loading indicator.
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                      })
-                  : const Center(child: Text('Initializing camera...')),
-            ))
+                    clipBehavior: Clip.hardEdge,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Hero(
+                      tag: 'image-preview',
+                      child: FutureBuilder(
+                          future: _initializeControllerFuture,
+                          builder: (ctx, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              // If the Future is complete, display the preview.
+                              return CameraPreview(_cameraController!);
+                            } else {
+                              // Otherwise, display a loading indicator.
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          }),
+                    )))
           ],
         ));
   }
