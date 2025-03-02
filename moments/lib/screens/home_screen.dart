@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:moments/data/dummy_places.dart';
 import 'package:moments/providers/camera_provider.dart';
-import 'package:moments/providers/page_provider.dart';
 import 'package:moments/providers/places_provider.dart';
 import 'package:moments/screens/new_place_screen.dart';
 import 'package:moments/widgets/camera_viewfinder.dart';
@@ -20,20 +18,20 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen>
     with TickerProviderStateMixin {
-  late PageController _pageViewController;
+  late PageController pageController;
   late TabController _tabController;
   int _currentPageIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _pageViewController = PageController();
+    pageController = PageController();
     _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
   void dispose() {
-    _pageViewController.dispose();
+    pageController.dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -54,7 +52,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     void handleCamPress() {
       // if we're on the slides then set the current page to the last
       if (_currentPageIndex < slides.length - 1) {
-        _pageViewController.animateToPage(slides.length - 1,
+        pageController.animateToPage(slides.length - 1,
             duration: Durations.long2, curve: Curves.decelerate);
         return;
       }
@@ -63,8 +61,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       ref.read(cameraProvider.notifier).takePicture().then((image) {
         if (image == null) return;
         var pickedImage = File(image.path);
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (ctx) => NewPlaceScreen(pickedImage)));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => NewPlaceScreen(pickedImage, pageController)));
+      });
+    }
+
+    void handleGalleryPress() {
+      ref.read(cameraProvider.notifier).selectFromGallery().then((image) {
+        if (image == null) return;
+        var pickedImage = File(image.path);
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => NewPlaceScreen(pickedImage, pageController)));
       });
     }
 
@@ -74,7 +81,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         children: [
           Expanded(
             child: PageView(
-              controller: _pageViewController,
+              controller: pageController,
               onPageChanged: (page) {
                 setState(() {
                   debugPrint('current page: $page');
@@ -100,8 +107,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 15),
                           child: SmoothPageIndicator(
-                              controller: _pageViewController,
-                              count: slides.length),
+                              controller: pageController, count: slides.length),
                         ),
                       ),
                       SizedBox(
@@ -122,18 +128,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ),
                 if (_currentPageIndex == slides.length - 1)
                   IconButton.outlined(
-                      onPressed: () {
-                        ref
-                            .read(cameraProvider.notifier)
-                            .selectFromGallery()
-                            .then((image) {
-                          if (image == null) return;
-                          var pickedImage = File(image.path);
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => NewPlaceScreen(pickedImage)));
-                        });
-                      },
-                      icon: Icon(Icons.image))
+                      onPressed: handleGalleryPress, icon: Icon(Icons.image))
               ],
             ),
           )

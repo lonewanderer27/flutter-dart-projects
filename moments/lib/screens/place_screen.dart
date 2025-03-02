@@ -13,7 +13,7 @@ class PlaceScreen extends StatelessWidget {
 
     if (place != null) {
       body = Hero(
-          tag: place!.id,
+          tag: 'image-preview',
           child: Image.file(
             place!.image,
             height: double.infinity,
@@ -23,7 +23,7 @@ class PlaceScreen extends StatelessWidget {
 
     if (dummyPlace != null) {
       body = Hero(
-        tag: dummyPlace!.id,
+        tag: 'image-preview',
         child: Image.asset(
           dummyPlace!.imagePath,
           height: double.infinity,

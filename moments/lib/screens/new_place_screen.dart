@@ -7,8 +7,9 @@ import 'package:moments/providers/location_provider.dart';
 import 'package:moments/providers/places_provider.dart';
 
 class NewPlaceScreen extends ConsumerStatefulWidget {
-  const NewPlaceScreen(this.image, {super.key});
+  const NewPlaceScreen(this.image, this.pageController, {super.key});
   final File image;
+  final PageController pageController;
 
   @override
   ConsumerState<NewPlaceScreen> createState() => _NewPlaceScreenState();
@@ -67,12 +68,18 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
   void handleAdd() {
     if (_loc.address == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Location not available. Please try again.')),
+        const SnackBar(
+            content: Text('Location not available. Please try again.')),
       );
       return;
     }
-    
+
     _places.add(_savedName, widget.image, DateTime.now(), _loc.address!);
+
+    // we navigate to the very first page
+    // so the user can see the newly added fave place
+    widget.pageController.jumpTo(0);
+
     Navigator.of(context).pop();
   }
 
@@ -110,7 +117,7 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
         ),
       );
     }
-    
+
     if (_loc.locationData?.latitude == null) {
       return Center(
         child: Column(
@@ -144,18 +151,17 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
             child: IgnorePointer(
               child: FlutterMap(
                 options: MapOptions(
-                  initialCenter: LatLng(
-                    _loc.locationData!.latitude!,
-                    _loc.locationData!.longitude!,
-                  )
-                ),
+                    initialCenter: LatLng(
+                  _loc.locationData!.latitude!,
+                  _loc.locationData!.longitude!,
+                )),
                 children: [
                   TileLayer(
-                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
+                  MarkerLayer(markers: [
+                    Marker(
                         point: LatLng(
                           _loc.locationData!.latitude!,
                           _loc.locationData!.longitude!,
@@ -163,10 +169,8 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
                         child: Icon(
                           Icons.location_on,
                           color: Colors.red,
-                        )
-                      )
-                    ]
-                  )
+                        ))
+                  ])
                 ],
               ),
             ),
@@ -197,12 +201,13 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
           ),
           TextButton(
             onPressed: () => setState(() => _step = 1),
-            child: Text('Go back and retry', style: TextStyle(color: Colors.white)),
+            child: Text('Go back and retry',
+                style: TextStyle(color: Colors.white)),
           ),
         ],
       );
     }
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -247,105 +252,104 @@ class _NewPlaceScreenState extends ConsumerState<NewPlaceScreen> {
     _places = ref.read(placesProvider.notifier);
 
     return Form(
-      key: _formKey,
-      child: Scaffold(
-        backgroundColor: Colors.black54,
-        body: Stack(
-          children: [
-            Hero(
-              tag: 'image-preview',
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                clipBehavior: Clip.hardEdge,
-                child: Image.file(
-                  widget.image,
-                  height: double.infinity,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              )
-            ),
-            Column(
+        key: _formKey,
+        child: Scaffold(
+            backgroundColor: Colors.black54,
+            body: Stack(
               children: [
-                Spacer(), // Use Spacer instead of Expanded with SizedBox
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.circular(20)
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: _step == 0
-                          // Caption screen
-                          ? Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                TextFormField(
-                                  style: TextStyle(color: Colors.white),
-                                  initialValue: _savedName,
-                                  decoration: InputDecoration(
-                                    label: Text(
-                                      'Caption',
-                                      style: TextStyle(color: Colors.white),
-                                    )
-                                  ),
-                                  onSaved: (value) {
-                                    setState(() {
-                                      _savedName = value ?? '';
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter a caption';
-                                    }
-
-                                    if (value.trim().length < 2 || value.length > 50) {
-                                      return 'Must be between 2 to 50 characters.';
-                                    }
-
-                                    return null;
-                                  },
-                                ),
-                              ],
-                            )
-                          : _step == 1
-                            // Location screen
-                            ? _buildLocationContent()
-                            // Confirm screen
-                            : _buildConfirmScreen(),
+                Hero(
+                    tag: 'image-preview',
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      clipBehavior: Clip.hardEdge,
+                      child: Image.file(
+                        widget.image,
+                        height: double.infinity,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 20, left: 20, right: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.white),
-                              onPressed: _handlePrev,
-                              child: Text(_step == 0 ? 'Cancel' : 'Back')
+                    )),
+                Column(
+                  children: [
+                    Spacer(),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.black54,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: _step == 0
+                                // Caption screen
+                                ? Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      TextFormField(
+                                        style: TextStyle(color: Colors.white),
+                                        initialValue: _savedName,
+                                        decoration: InputDecoration(
+                                            label: Text(
+                                          'Caption',
+                                          style: TextStyle(color: Colors.white),
+                                        )),
+                                        onSaved: (value) {
+                                          setState(() {
+                                            _savedName = value ?? '';
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter a caption';
+                                          }
+
+                                          if (value.trim().length < 2 ||
+                                              value.length > 50) {
+                                            return 'Must be between 2 to 50 characters.';
+                                          }
+
+                                          return null;
+                                        },
+                                      ),
+                                    ],
+                                  )
+                                : _step == 1
+                                    // Location screen
+                                    ? _buildLocationContent()
+                                    // Confirm screen
+                                    : _buildConfirmScreen(),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 20, left: 20, right: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                    style: TextButton.styleFrom(
+                                        foregroundColor: Colors.white),
+                                    onPressed: _handlePrev,
+                                    child:
+                                        Text(_step == 0 ? 'Cancel' : 'Back')),
+                                ElevatedButton(
+                                    onPressed: _step == 2 &&
+                                            _loc.loading == false &&
+                                            _loc.address == null
+                                        ? null
+                                        : _handleNext,
+                                    child: Text(_step == 2 ? 'Save' : 'Next'))
+                              ],
                             ),
-                            ElevatedButton(
-                              onPressed: _step == 2 && _loc.loading == false && _loc.address == null ? null : _handleNext,
-                              child: Text(_step == 2 ? 'Save' : 'Next')
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
-        )
-      )
-    );
+            )));
   }
 }
