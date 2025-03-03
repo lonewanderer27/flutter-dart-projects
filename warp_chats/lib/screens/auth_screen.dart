@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:warp_chats/constants/assets.dart';
+
+// Setup the global firebase instance
+final _fb = FirebaseAuth.instance;
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -14,7 +18,7 @@ class _AuthScreenState extends State<AuthScreen> {
   String _enteredEmail = '';
   String _enteredPassword = '';
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_formKey.currentState!.validate() == false) {
       return;
     }
@@ -22,6 +26,27 @@ class _AuthScreenState extends State<AuthScreen> {
     _formKey.currentState!.save();
     debugPrint('Email: $_enteredEmail');
     debugPrint('Password: $_enteredPassword');
+
+    try {
+      if (_signUp) {
+        // sign up user
+        UserCredential userCreds = await _fb.createUserWithEmailAndPassword(
+            email: _enteredEmail, password: _enteredPassword);
+
+        debugPrint('User creds: $userCreds');
+      } else {
+        // sign in user
+        UserCredential userCreds = await _fb.signInWithEmailAndPassword(
+            email: _enteredEmail, password: _enteredPassword);
+
+        debugPrint('User creds: $userCreds');
+      }
+    } on FirebaseAuthException catch (error) {
+      debugPrint('Auth error: ${error.message}');
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('There has been an error. Try again.')));
+    }
   }
 
   void _toggleSignUp() {
@@ -55,7 +80,9 @@ class _AuthScreenState extends State<AuthScreen> {
               height: 10,
             ),
             Text(
-              _signUp ? 'Create your account to get started' : "Please enter your credentials to continue",
+              _signUp
+                  ? 'Create your account to get started'
+                  : "Please enter your credentials to continue",
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!
