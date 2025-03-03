@@ -9,6 +9,27 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final _formKey = GlobalKey<FormState>();
+  bool _signUp = false;
+  String _enteredEmail = '';
+  String _enteredPassword = '';
+
+  void _submit() {
+    if (_formKey.currentState!.validate() == false) {
+      return;
+    }
+
+    _formKey.currentState!.save();
+    debugPrint('Email: $_enteredEmail');
+    debugPrint('Password: $_enteredPassword');
+  }
+
+  void _toggleSignUp() {
+    setState(() {
+      _signUp = !_signUp;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,22 +40,22 @@ class _AuthScreenState extends State<AuthScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-                margin:
-                    EdgeInsets.only(top: 30, bottom: 20, left: 20, right: 20),
+                margin: const EdgeInsets.only(
+                    top: 30, bottom: 20, left: 20, right: 20),
                 width: 200,
                 child: Image.asset(Assets.chat)),
             Text(
-              'Welcome back!',
+              _signUp ? 'Hi there!' : 'Welcome back!',
               style: Theme.of(context)
                   .textTheme
                   .headlineSmall!
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
-              "If you already have an account, we'll log you in",
+              _signUp ? 'Create your account to get started' : "Please enter your credentials to continue",
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!
@@ -45,34 +66,56 @@ class _AuthScreenState extends State<AuthScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Form(
+                    key: _formKey,
                     child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      textCapitalization: TextCapitalization.none,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                          icon: Icon(Icons.mail), label: Text('Email')),
-                    ),
-                    // SizedBox(height: 10),
-                    // TextFormField(
-                    //   obscureText: true,
-                    //   autocorrect: false,
-                    //   decoration: InputDecoration(
-                    //       icon: Icon(Icons.lock), label: Text('Password')),
-                    // ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        TextButton(onPressed: () {}, child: Text('Next'))
+                        TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          textCapitalization: TextCapitalization.none,
+                          autocorrect: false,
+                          decoration: InputDecoration(
+                              icon: Icon(Icons.mail), label: Text('Email')),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Please return a valid email';
+                            }
+
+                            return null;
+                          },
+                          onSaved: (value) {
+                            _enteredEmail = value!;
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        TextFormField(
+                          obscureText: true,
+                          autocorrect: false,
+                          decoration: InputDecoration(
+                              icon: Icon(Icons.lock), label: Text('Password')),
+                          validator: (value) {
+                            if (value == null || value.trim().length < 6) {
+                              return 'Password must be at least 6 characters long';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            _enteredPassword = value!;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                                onPressed: _submit,
+                                child: Text(_signUp ? 'Sign Up' : 'Sign In'))
+                          ],
+                        ),
                       ],
-                    ),
-                  ],
-                )),
+                    )),
               ),
             ),
             Text(
@@ -82,7 +125,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   .bodyLarge!
                   .copyWith(color: Colors.white),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -92,7 +135,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.red,
                   ),
@@ -101,16 +144,6 @@ class _AuthScreenState extends State<AuthScreen> {
                     scale: 1.2,
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    shape: CircleBorder(),
-                    padding: EdgeInsets.all(20),
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.red,
-                  ),
-                  child: Icon(Icons.mail, color: Colors.white),
-                )
               ],
             ),
             SizedBox(
@@ -120,7 +153,9 @@ class _AuthScreenState extends State<AuthScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Don't have an account?",
+                  _signUp
+                      ? "Already have an account?"
+                      : "Don't have an account?",
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge!
@@ -130,8 +165,9 @@ class _AuthScreenState extends State<AuthScreen> {
                   width: 5,
                 ),
                 GestureDetector(
+                  onTap: _toggleSignUp,
                   child: Text(
-                    "Be a guest.",
+                    _signUp ? "Sign In" : "Sign Up",
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
