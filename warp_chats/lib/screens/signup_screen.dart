@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:warp_chats/constants/assets.dart';
 import 'package:warp_chats/screens/signin_screen.dart';
+import 'package:warp_chats/widgets/user_image_picker.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -189,23 +189,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
                 Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                            color: const Color.fromARGB(116, 3, 3, 54),
-                            blurRadius: 50 // Shadow position
-                            ),
-                      ],
-                    ),
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundImage: _chosenImage == null
-                          ? Image.asset(Assets.unisexAvatar, width: 100).image
-                          : Image.file(_chosenImage!).image,
-                    ),
-                  ),
+                  child: UserImagePicker(onPickImage: (File image) {  }, currentImage: null,),
                 )
               ],
             ),
