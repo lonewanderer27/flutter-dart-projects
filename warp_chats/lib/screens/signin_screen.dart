@@ -1,22 +1,32 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:warp_chats/constants/assets.dart';
+import 'package:warp_chats/screens/signup_screen.dart';
 
-// Setup the global firebase instance
-final _fb = FirebaseAuth.instance;
+// Setup firebase modules
+final fb = FirebaseAuth.instance;
+final db = FirebaseFirestore.instance;
 
-class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+class SigninScreen extends StatefulWidget {
+  const SigninScreen({super.key});
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  State<SigninScreen> createState() => _SigninScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _SigninScreenState extends State<SigninScreen> {
   final _formKey = GlobalKey<FormState>();
-  bool _signUp = false;
   String _enteredEmail = '';
   String _enteredPassword = '';
+
+  void _handleSignUp() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (builder) => SignupScreen()));
+  }
 
   Future<void> _submit() async {
     if (_formKey.currentState!.validate() == false) {
@@ -28,31 +38,17 @@ class _AuthScreenState extends State<AuthScreen> {
     debugPrint('Password: $_enteredPassword');
 
     try {
-      if (_signUp) {
-        // sign up user
-        UserCredential userCreds = await _fb.createUserWithEmailAndPassword(
-            email: _enteredEmail, password: _enteredPassword);
+      // sign in user
+      UserCredential userCreds = await fb.signInWithEmailAndPassword(
+          email: _enteredEmail, password: _enteredPassword);
 
-        debugPrint('User creds: $userCreds');
-      } else {
-        // sign in user
-        UserCredential userCreds = await _fb.signInWithEmailAndPassword(
-            email: _enteredEmail, password: _enteredPassword);
-
-        debugPrint('User creds: $userCreds');
-      }
+      debugPrint('User creds: $userCreds');
     } on FirebaseAuthException catch (error) {
       debugPrint('Auth error: ${error.message}');
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('There has been an error. Try again.')));
     }
-  }
-
-  void _toggleSignUp() {
-    setState(() {
-      _signUp = !_signUp;
-    });
   }
 
   @override
@@ -64,29 +60,34 @@ class _AuthScreenState extends State<AuthScreen> {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-                margin: const EdgeInsets.only(
-                    top: 30, bottom: 20, left: 20, right: 20),
-                width: 200,
-                child: Image.asset(Assets.chat)),
-            Text(
-              _signUp ? 'Hi there!' : 'Welcome back!',
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall!
-                  .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              _signUp
-                  ? 'Create your account to get started'
-                  : "Please enter your credentials to continue",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: Colors.white),
+            Hero(
+                tag: 'header-image',
+                child: Container(
+                    margin: const EdgeInsets.only(
+                        top: 30, bottom: 20, left: 20, right: 20),
+                    width: 200,
+                    child: Image.asset(Assets.chat))),
+            Hero(
+              tag: 'header-text',
+              child: Column(
+                children: [
+                  Text(
+                    'Welcome back!',
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Please enter your credentials to continue",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: Colors.white),
+                  )
+                ],
+              ),
             ),
             Card(
               margin: const EdgeInsets.all(20),
@@ -137,8 +138,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                                onPressed: _submit,
-                                child: Text(_signUp ? 'Sign Up' : 'Sign In'))
+                                onPressed: _submit, child: Text('Sign In'))
                           ],
                         ),
                       ],
@@ -180,9 +180,7 @@ class _AuthScreenState extends State<AuthScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  _signUp
-                      ? "Already have an account?"
-                      : "Don't have an account?",
+                  "Already have an account?",
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge!
@@ -192,9 +190,9 @@ class _AuthScreenState extends State<AuthScreen> {
                   width: 5,
                 ),
                 GestureDetector(
-                  onTap: _toggleSignUp,
+                  onTap: _handleSignUp,
                   child: Text(
-                    _signUp ? "Sign In" : "Sign Up",
+                    "Sign In",
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),

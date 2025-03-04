@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:warp_chats/screens/auth_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:warp_chats/screens/signin_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:warp_chats/screens/chat_screen.dart';
 import 'package:warp_chats/screens/splash_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  // load env file
+  await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const App());
@@ -34,7 +37,7 @@ class App extends StatelessWidget {
               if (snapshot.hasData) {
                 return const ChatScreen();
               }
-              return const AuthScreen();
+              return const SigninScreen();
             }));
   }
 }
