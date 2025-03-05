@@ -180,7 +180,7 @@ class _SigninScreenState extends State<SigninScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Already have an account?",
+                  "Don't have an account?",
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge!
@@ -192,7 +192,7 @@ class _SigninScreenState extends State<SigninScreen> {
                 GestureDetector(
                   onTap: _handleSignUp,
                   child: Text(
-                    "Sign In",
+                    "Sign Up",
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
