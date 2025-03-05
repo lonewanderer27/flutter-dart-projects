@@ -19,6 +19,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
 
   File? chosenImage;
+  String _enteredUsername = '';
   String _enteredEmail = '';
   String _enteredPassword = '';
   bool _isLoading = false;
@@ -36,25 +37,6 @@ class _SignupScreenState extends State<SignupScreen> {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  Future<void> _uploadImageToFb(File imageFile) async {
-    // Get the file
-
-    // Optional: Reduce the size of the image
-
-    // Convert into base64 string
-    List<int> imageBytes = await imageFile.readAsBytes();
-    String base64Image = base64Encode(imageBytes);
-
-    // Create the user profile with image
-    final profile = <String, dynamic>{'base64': base64Image};
-
-    // Upload to firestore
-    return await db
-        .collection('avatars')
-        .doc(fb.currentUser!.uid.toString())
-        .set(profile);
   }
 
   Future<void> _submit() async {
@@ -82,13 +64,23 @@ class _SignupScreenState extends State<SignupScreen> {
 
     try {
       // sign up user
-      UserCredential userCreds = await fb.createUserWithEmailAndPassword(
+      UserCredential userCreds = await fa.createUserWithEmailAndPassword(
           email: _enteredEmail, password: _enteredPassword);
 
       debugPrint('User creds: $userCreds');
 
-      // upload the user avatar to firestore
-      await _uploadImageToFb(chosenImage!);
+      // Convert image into base64 string
+      List<int> imageBytes = await chosenImage!.readAsBytes();
+      String base64Image = base64Encode(imageBytes);
+
+      // create our final user object
+      final profile = <String, dynamic>{
+        'username': _enteredUsername,
+        'avatarBase64': base64Image
+      };
+
+      // upload user information to firebase
+      await fs.collection('users').doc(fa.currentUser!.uid).set(profile);
 
       // go to chats screen
       Navigator.pushReplacement(
@@ -191,6 +183,28 @@ class _SignupScreenState extends State<SignupScreen> {
                                 },
                                 onSaved: (value) {
                                   _enteredEmail = value!;
+                                },
+                              ),
+                              SizedBox(height: 10),
+                              TextFormField(
+                                textCapitalization: TextCapitalization.none,
+                                autocorrect: false,
+                                decoration: InputDecoration(
+                                    icon: Icon(Icons.person),
+                                    label: Text('Username')),
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return 'Please return a valid username';
+                                  }
+
+                                  if (value.trim().length < 4) {
+                                    return 'Username must be at least 4 characters';
+                                  }
+
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  _enteredUsername = value!;
                                 },
                               ),
                               SizedBox(height: 10),

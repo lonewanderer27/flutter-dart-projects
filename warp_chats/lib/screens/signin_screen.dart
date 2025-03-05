@@ -8,8 +8,8 @@ import 'package:warp_chats/constants/assets.dart';
 import 'package:warp_chats/screens/signup_screen.dart';
 
 // Setup firebase modules
-final fb = FirebaseAuth.instance;
-final db = FirebaseFirestore.instance;
+final fa = FirebaseAuth.instance;
+final fs = FirebaseFirestore.instance;
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -39,7 +39,7 @@ class _SigninScreenState extends State<SigninScreen> {
 
     try {
       // sign in user
-      UserCredential userCreds = await fb.signInWithEmailAndPassword(
+      UserCredential userCreds = await fa.signInWithEmailAndPassword(
           email: _enteredEmail, password: _enteredPassword);
 
       debugPrint('User creds: $userCreds');
