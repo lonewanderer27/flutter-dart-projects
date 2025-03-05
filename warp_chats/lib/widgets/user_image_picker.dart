@@ -37,8 +37,11 @@ class _UserImagePickerState extends State<UserImagePicker> {
 
     setState(() {
       _chosenImage = File(pickedImage!.path);
+      widget.onPickImage(_chosenImage!);
     });
     debugPrint('Chosen Image: ${_chosenImage.toString()}');
+
+    Navigator.of(context).pop();
   }
 
   @override

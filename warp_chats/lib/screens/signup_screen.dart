@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:warp_chats/constants/assets.dart';
+import 'package:warp_chats/screens/chat_screen.dart';
 import 'package:warp_chats/screens/signin_screen.dart';
 import 'package:warp_chats/widgets/user_image_picker.dart';
 
@@ -17,9 +18,10 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  File? _chosenImage;
+  File? chosenImage;
   String _enteredEmail = '';
   String _enteredPassword = '';
+  bool _isLoading = false;
 
   void _handleSignIn() {
     if (Navigator.canPop(context)) {
@@ -28,6 +30,12 @@ class _SignupScreenState extends State<SignupScreen> {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (builder) => SigninScreen()));
     }
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   Future<void> _uploadImageToFb(File imageFile) async {
@@ -40,16 +48,26 @@ class _SignupScreenState extends State<SignupScreen> {
     String base64Image = base64Encode(imageBytes);
 
     // Create the user profile with image
-    final profile = <String, dynamic>{'avatarBase64': base64Image};
+    final profile = <String, dynamic>{'base64': base64Image};
 
     // Upload to firestore
-    await db
+    return await db
         .collection('avatars')
         .doc(fb.currentUser!.uid.toString())
         .set(profile);
   }
 
   Future<void> _submit() async {
+    // if we're currently loading, then we return
+    if (_isLoading == true) return;
+
+    // if the user has not submitted an image, we return
+    if (chosenImage == null) {
+      _showMessage('Please set your profile image.');
+      return;
+    }
+
+    // if we have errors, we return
     if (_formKey.currentState!.validate() == false) {
       return;
     }
@@ -58,6 +76,10 @@ class _SignupScreenState extends State<SignupScreen> {
     debugPrint('Email: $_enteredEmail');
     debugPrint('Password: $_enteredPassword');
 
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       // sign up user
       UserCredential userCreds = await fb.createUserWithEmailAndPassword(
@@ -65,13 +87,30 @@ class _SignupScreenState extends State<SignupScreen> {
 
       debugPrint('User creds: $userCreds');
 
-      // submit the image
+      // upload the user avatar to firestore
+      await _uploadImageToFb(chosenImage!);
+
+      // go to chats screen
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (builder) => ChatScreen()));
+
+      setState(() {
+        _isLoading = false;
+      });
     } on FirebaseAuthException catch (error) {
       debugPrint('Auth error: ${error.message}');
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('There has been an error. Try again.')));
+      _showMessage('There has been an error. Try again.');
+
+      setState(() {
+        _isLoading = false;
+      });
     }
+  }
+
+  void handlePickImage(File imageFile) {
+    setState(() {
+      chosenImage = imageFile;
+    });
   }
 
   @override
@@ -178,9 +217,11 @@ class _SignupScreenState extends State<SignupScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  TextButton(
-                                      onPressed: _submit,
-                                      child: Text('Sign Up'))
+                                  if (_isLoading) CircularProgressIndicator(),
+                                  if (!_isLoading)
+                                    TextButton(
+                                        onPressed: _submit,
+                                        child: Text('Sign Up'))
                                 ],
                               ),
                             ],
@@ -189,7 +230,10 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
                 Center(
-                  child: UserImagePicker(onPickImage: (File image) {  }, currentImage: null,),
+                  child: UserImagePicker(
+                    onPickImage: handlePickImage,
+                    currentImage: chosenImage,
+                  ),
                 )
               ],
             ),
