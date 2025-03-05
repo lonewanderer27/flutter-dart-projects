@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:warp_chats/constants/assets.dart';
-import 'package:warp_chats/screens/chat_screen.dart';
+import 'package:warp_chats/screens/threads_screen.dart';
 import 'package:warp_chats/screens/signin_screen.dart';
 import 'package:warp_chats/widgets/user_image_picker.dart';
 
@@ -84,7 +84,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
       // go to chats screen
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (builder) => ChatScreen()));
+          context, MaterialPageRoute(builder: (builder) => Threads_Screen()));
 
       setState(() {
         _isLoading = false;
