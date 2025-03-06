@@ -81,11 +81,14 @@ class _UserImagePickerState extends State<UserImagePicker> {
             color: Colors.white,
             shape: CircleBorder(),
             child: _chosenImage != null
-                ? ClipRRect(
-                    clipBehavior: Clip.hardEdge,
-                    borderRadius: BorderRadius.circular(100),
-                    child: Image.file(_chosenImage!,
-                        height: 130, fit: BoxFit.cover))
+                ? ClipOval(
+                    child: Container(
+                        width: 130,
+                        height: 130,
+                        decoration: BoxDecoration(shape: BoxShape.circle),
+                        child: Image.file(_chosenImage!,
+                            height: 130, fit: BoxFit.cover)),
+                  )
                 : Padding(
                     padding: EdgeInsets.all(20),
                     child: Icon(
