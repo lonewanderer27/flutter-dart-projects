@@ -4,6 +4,7 @@ import 'package:warp_chats/models/chat.dart';
 import 'package:warp_chats/models/thread.dart';
 import 'package:warp_chats/screens/signin_screen.dart';
 import 'package:warp_chats/widgets/chat_item.dart';
+import 'package:warp_chats/widgets/empty_chat.dart';
 
 class ThreadScreen extends StatefulWidget {
   const ThreadScreen(this.thread, {super.key});
@@ -16,7 +17,7 @@ class ThreadScreen extends StatefulWidget {
 class _ThreadScreenState extends State<ThreadScreen> {
   final _messageController = TextEditingController();
   bool _isLoading = false;
-
+ 
   @override
   void dispose() {
     _messageController.dispose();
@@ -73,11 +74,11 @@ class _ThreadScreenState extends State<ThreadScreen> {
         children: [
           Expanded(
             child: StreamBuilder(
-                initialData: chats,
                 stream: chats,
                 builder: (ctx, chatsSnapshot) {
                   if (chatsSnapshot.connectionState ==
-                      ConnectionState.waiting) {
+                          ConnectionState.waiting &&
+                      chatsSnapshot.data?.docs.isEmpty == null) {
                     // TODO: Return a Skeletonizer items loading
                     return const Center(
                       child: CircularProgressIndicator(),
@@ -86,10 +87,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
 
                   if (!chatsSnapshot.hasData ||
                       chatsSnapshot.data!.docs.isEmpty) {
-                    // TODO: Animated empty emoji
-                    return const Center(
-                      child: Text(''),
-                    );
+                    return EmptyChat();
                   }
 
                   final loadedChats = chatsSnapshot.data!.docs;
