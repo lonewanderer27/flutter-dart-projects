@@ -22,6 +22,7 @@ class _SigninScreenState extends State<SigninScreen> {
   final _formKey = GlobalKey<FormState>();
   String _enteredEmail = '';
   String _enteredPassword = '';
+  bool _isLoading = false;
 
   void _handleSignUp() {
     Navigator.of(context)
@@ -29,6 +30,9 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   Future<void> _submit() async {
+    // if we're currently loading, then we return
+    if (_isLoading == true) return;
+
     if (_formKey.currentState!.validate() == false) {
       return;
     }
@@ -37,17 +41,29 @@ class _SigninScreenState extends State<SigninScreen> {
     debugPrint('Email: $_enteredEmail');
     debugPrint('Password: $_enteredPassword');
 
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       // sign in user
       UserCredential userCreds = await fa.signInWithEmailAndPassword(
           email: _enteredEmail, password: _enteredPassword);
 
       debugPrint('User creds: $userCreds');
+
+      setState(() {
+        _isLoading = false;
+      });
     } on FirebaseAuthException catch (error) {
       debugPrint('Auth error: ${error.message}');
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('There has been an error. Try again.')));
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -137,8 +153,10 @@ class _SigninScreenState extends State<SigninScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            TextButton(
-                                onPressed: _submit, child: Text('Sign In'))
+                            if (_isLoading) CircularProgressIndicator(),
+                            if (!_isLoading)
+                              TextButton(
+                                  onPressed: _submit, child: Text('Sign In'))
                           ],
                         ),
                       ],
