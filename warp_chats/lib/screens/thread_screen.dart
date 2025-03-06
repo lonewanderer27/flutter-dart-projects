@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:warp_chats/models/chat.dart';
@@ -68,7 +70,69 @@ class _ThreadScreenState extends State<ThreadScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.thread.name),
+        title: Row(
+          children: [
+            StreamBuilder(
+                stream: users,
+                builder: (ctx, usersSnapshot) {
+                  Widget icon = CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.person, size: 25),
+                  );
+
+                  // display our own profile picture if we're on our own chat
+                  if (usersSnapshot.hasData &&
+                      usersSnapshot.data!.docs.length == 1 &&
+                      usersSnapshot.data!.docs.first.get('avatarBase64') !=
+                          null) {
+                    icon = ClipOval(
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(shape: BoxShape.circle),
+                        child: Image.memory(
+                          base64Decode(usersSnapshot.data!.docs.first
+                              .get('avatarBase64')),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  }
+
+                  // display the other user's profile picture if users are more than 1
+                  if (usersSnapshot.hasData &&
+                      usersSnapshot.data!.docs.length > 1) {
+                    // lets check first where is the object of the second user
+                    // by filtering the ID of the object, we can check
+                    // if the ID is not equal to us, then that's the other user
+                    // that we need to get the avatarBase64 from
+                    var otherUser = usersSnapshot.data!.docs
+                        .firstWhere((user) => user.id != fa.currentUser!.uid);
+
+                    icon = ClipOval(
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(shape: BoxShape.circle),
+                        child: Image.memory(
+                          otherUser.get('avatarBase64'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  }
+
+                  return icon;
+
+                  // if the amount of users is only 1, then we are in our own chat
+                  // therefore we display our profile
+                }),
+            SizedBox(
+              width: 10,
+            ),
+            Text(widget.thread.name)
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -78,7 +142,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
                 builder: (ctx, chatsSnapshot) {
                   if (chatsSnapshot.connectionState ==
                           ConnectionState.waiting &&
-                      chatsSnapshot.data?.docs.isEmpty == null) {
+                      chatsSnapshot.data == null) {
                     // TODO: Return a Skeletonizer items loading
                     return const Center(
                       child: CircularProgressIndicator(),
