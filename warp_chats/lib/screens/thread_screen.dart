@@ -17,7 +17,7 @@ class ThreadScreen extends StatefulWidget {
 class _ThreadScreenState extends State<ThreadScreen> {
   final _messageController = TextEditingController();
   bool _isLoading = false;
- 
+
   @override
   void dispose() {
     _messageController.dispose();
@@ -56,7 +56,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
         .collection('threads')
         .doc(widget.thread.id)
         .collection('chats')
-        .orderBy('createdAt', descending: false)
+        .orderBy('createdAt', descending: true)
         .snapshots();
 
     // fetch all the users in this thread
@@ -93,27 +93,26 @@ class _ThreadScreenState extends State<ThreadScreen> {
                   final loadedChats = chatsSnapshot.data!.docs;
                   final lastChat = loadedChats.last;
 
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                        itemCount: loadedChats.length,
-                        itemBuilder: (ctx, index) {
-                          // create a new chat item
-                          Chat chat = Chat(
-                              id: loadedChats[index].id,
-                              createdAt: DateTime.parse(
-                                  loadedChats[index].get('createdAt')),
-                              message: loadedChats[index].get('message'),
-                              userId: loadedChats[index].get('userId'),
-                              // TODO: Replace with actual username
-                              userName: 'user 🤩');
+                  return ListView.builder(
+                      padding: const EdgeInsets.all(10),
+                      reverse: true,
+                      itemCount: loadedChats.length,
+                      itemBuilder: (ctx, index) {
+                        // create a new chat item
+                        Chat chat = Chat(
+                            id: loadedChats[index].id,
+                            createdAt: DateTime.parse(
+                                loadedChats[index].get('createdAt')),
+                            message: loadedChats[index].get('message'),
+                            userId: loadedChats[index].get('userId'),
+                            // TODO: Replace with actual username
+                            userName: 'user 🤩');
 
-                          return ChatItem(
-                            chat,
-                            showDateTime: lastChat.id == chat.id,
-                          );
-                        }),
-                  );
+                        return ChatItem(
+                          chat,
+                          showDateTime: lastChat.id == chat.id,
+                        );
+                      });
                 }),
           ),
           Padding(
