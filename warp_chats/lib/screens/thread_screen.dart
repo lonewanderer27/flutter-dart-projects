@@ -91,6 +91,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
                   }
 
                   final loadedChats = chatsSnapshot.data!.docs;
+                  final lastChat = loadedChats.last;
 
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -98,7 +99,6 @@ class _ThreadScreenState extends State<ThreadScreen> {
                         itemCount: loadedChats.length,
                         itemBuilder: (ctx, index) {
                           // create a new chat item
-
                           Chat chat = Chat(
                               id: loadedChats[index].id,
                               createdAt: DateTime.parse(
@@ -108,7 +108,10 @@ class _ThreadScreenState extends State<ThreadScreen> {
                               // TODO: Replace with actual username
                               userName: 'user 🤩');
 
-                          return ChatItem(chat);
+                          return ChatItem(
+                            chat,
+                            showDateTime: lastChat.id == chat.id,
+                          );
                         }),
                   );
                 }),
