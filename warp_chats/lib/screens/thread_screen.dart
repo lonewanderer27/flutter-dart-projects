@@ -14,6 +14,40 @@ class ThreadScreen extends StatefulWidget {
 }
 
 class _ThreadScreenState extends State<ThreadScreen> {
+  final _messageController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitMessage() async {
+    final message = _messageController.text;
+
+    // return if the message is empty
+    if (message.isEmpty) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    // add the new message
+    fs.collection('threads').doc(widget.thread.id).collection('chats').add({
+      'message': message,
+      'createdAt': DateTime.now().toIso8601String().toString(),
+      'userId': fa.currentUser!.uid
+    });
+
+    // reset our text input
+    _messageController.clear();
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // fetch all the chats
@@ -21,6 +55,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
         .collection('threads')
         .doc(widget.thread.id)
         .collection('chats')
+        .orderBy('createdAt', descending: false)
         .snapshots();
 
     // fetch all the users in this thread
@@ -38,6 +73,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
         children: [
           Expanded(
             child: StreamBuilder(
+                initialData: chats,
                 stream: chats,
                 builder: (ctx, chatsSnapshot) {
                   if (chatsSnapshot.connectionState ==
@@ -86,12 +122,16 @@ class _ThreadScreenState extends State<ThreadScreen> {
               children: [
                 Expanded(
                     child: TextField(
+                  readOnly: _isLoading,
+                  controller: _messageController,
                   textCapitalization: TextCapitalization.sentences,
                   autocorrect: true,
                   enableSuggestions: true,
                   decoration: InputDecoration(label: Text('Send a message...')),
                 )),
-                IconButton.filled(onPressed: () {}, icon: Icon(Icons.send))
+                IconButton.filled(
+                    onPressed: _isLoading ? null : _submitMessage,
+                    icon: Icon(Icons.send))
               ],
             )),
           )
