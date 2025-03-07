@@ -1,0 +1,10 @@
+{
+  "conventionalCommits.scopes": [
+    "signin_screen",
+    "signup_screen",
+    "threads_screen",
+    "thread_screen",
+    "chat_item",
+    "user_image_picker"
+  ]
+}
