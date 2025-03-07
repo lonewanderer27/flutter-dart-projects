@@ -84,7 +84,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
       // go to chats screen
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (builder) => Threads_Screen()));
+          context, MaterialPageRoute(builder: (builder) => ThreadsScreen()));
 
       setState(() {
         _isLoading = false;

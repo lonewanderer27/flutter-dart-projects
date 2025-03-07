@@ -1,34 +1,60 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:warp_chats/models/thread.dart';
 import 'package:warp_chats/screens/signin_screen.dart';
 import 'package:warp_chats/widgets/thread_item.dart';
 
-class Threads_Screen extends StatefulWidget {
-  const Threads_Screen({super.key});
+class ThreadsScreen extends StatefulWidget {
+  const ThreadsScreen({super.key});
 
   @override
-  State<Threads_Screen> createState() => _Threads_ScreenState();
+  State<ThreadsScreen> createState() => _ThreadsScreenState();
 }
 
-class _Threads_ScreenState extends State<Threads_Screen> {
+class _ThreadsScreenState extends State<ThreadsScreen> {
+  late Stream<QuerySnapshot> myThreads;
+
   @override
   void initState() {
     super.initState();
+    _setupPushNotifications();
   }
 
   void _handleLogout() {
     FirebaseAuth.instance.signOut();
   }
 
+  Future<void> _setupPushNotifications() async {
+    // request permission for push notifications
+    final fcm = FirebaseMessaging.instance;
+    await fcm.requestPermission();
+  }
+
+  Future<void> _subscribeToThreads(List<String> topics) async {
+    // for each thread that we are part of
+    // let's subscribe to that topic
+    // so that in backend, we can target topics
+    // as recepients of push notifications
+    await Future.forEach(topics, (topic) {
+      final fcm = FirebaseMessaging.instance;
+      fcm.subscribeToTopic(topic);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Stream<QuerySnapshot> myThreads = fs
+    myThreads = fs
         .collection('user_threads')
         .doc(fa.currentUser!.uid)
         .collection('threads')
         .snapshots();
+
+    myThreads.listen((snapshot) async {
+      await _subscribeToThreads(
+          snapshot.docs.map((thread) => thread.id).toList());
+    });
 
     return Scaffold(
         appBar: AppBar(
