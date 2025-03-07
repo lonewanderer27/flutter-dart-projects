@@ -155,7 +155,11 @@ class _ThreadScreenState extends State<ThreadScreen> {
                   }
 
                   final loadedChats = chatsSnapshot.data!.docs;
-                  final lastChat = loadedChats.last;
+                  // the last chat from firebase
+                  // becomes the first chat in our list
+                  // which is showed at the bottom
+                  // therefore that is what we need to show the dateTime for
+                  final lastChat = loadedChats.first;
 
                   return ListView.builder(
                       padding: const EdgeInsets.all(10),
