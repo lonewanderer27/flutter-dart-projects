@@ -34,11 +34,13 @@ class _ChatItemState extends State<ChatItem> {
     DateTime dateTimeToday = DateTime.now();
     String formattedDate = '';
     // if the date is still today, only output the time
-    if (dateTimeToday.day == widget.chat.createdAt.day) {
-      formattedDate = DateFormat('jm').format(widget.chat.createdAt);
-    } else {
+    formattedDate = DateFormat('jm').format(widget.chat.createdAt);
+
+    if (dateTimeToday.day != widget.chat.createdAt.day) {
       // otherwise, include a "Yesterday" at the start
       formattedDate = 'Yesterday at $formattedDate';
+    } else {
+      formattedDate = 'Today at $formattedDate';
     }
 
     return Expanded(
