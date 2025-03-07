@@ -35,7 +35,7 @@ class App extends StatelessWidget {
               }
 
               if (snapshot.hasData) {
-                return const Threads_Screen();
+                return const ThreadsScreen();
               }
               return const SigninScreen();
             }));
