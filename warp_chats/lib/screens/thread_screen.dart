@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:warp_chats/models/chat.dart';
@@ -57,9 +58,17 @@ class _ThreadScreenState extends State<ThreadScreen> {
     });
 
     try {
+      // get the default local url
+      String backendUrl = dotenv.env['BACKEND_URL']!;
+
+      // otherwise if we're in release mode, replace it with the prod url
+      if (kReleaseMode) {
+        backendUrl = dotenv.env['PROD_BACKEND_URL']!;
+      }
+
       // send request to backend for notification
       final res = await http.post(Uri.parse(
-          '${dotenv.env['BACKEND_URL']!}/threads/${widget.thread.id}/chats/${chatRef.id}/notifications'));
+          '$backendUrl/threads/${widget.thread.id}/chats/${chatRef.id}/notifications'));
 
       debugPrint('Notification: ${res.body}');
     } catch (error) {
