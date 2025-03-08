@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:warp_chats/constants/assets.dart';
 import 'package:warp_chats/screens/threads_screen.dart';
 import 'package:warp_chats/screens/signin_screen.dart';
 import 'package:warp_chats/widgets/user_image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -81,6 +84,20 @@ class _SignupScreenState extends State<SignupScreen> {
 
       // upload user information to firebase
       await fs.collection('users').doc(fa.currentUser!.uid).set(profile);
+
+      // get the default local url
+      String backendUrl = dotenv.env['BACKEND_URL']!;
+
+      // otherwise if we're in release mode, replace it with the prod url
+      if (kReleaseMode) {
+        backendUrl = dotenv.env['PROD_BACKEND_URL']!;
+      }
+
+      // create our very own yourself chat thread
+      final res = await http.post(Uri.parse(
+          '$backendUrl/users/${fa.currentUser!.uid}/create-yourself-thread'));
+
+      debugPrint('Yourself Thread: ${res.body}');
 
       // go to chats screen
       Navigator.pushReplacement(
