@@ -5,18 +5,6 @@ import { auth, firestore } from "..";
 export const createYourselfThread = async (req: Request, res: Response) => {
   const userId = req.params.userId;
 
-  if (!userId) {
-    return res.status(400).send({
-      status: STATUS.ERROR,
-      error: {
-        code: 400,
-        message: "User ID was not provided.",
-      },
-      data: null,
-      message: "User ID was not provided.",
-    });
-  }
-
   try {
     // try to get the user if it's valid
     await getUser(userId);
